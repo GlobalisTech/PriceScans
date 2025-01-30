@@ -1,2 +1,2 @@
 # PriceScans
-Python Price Scanner Proram
+Python Price Scanner Program
