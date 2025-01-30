@@ -48,10 +48,9 @@ BUY_RATES = {
 }
 
 def main():
-    st.set_page_config(page_title="Stock Portfolio Dashboard", layout="wide", initial_sidebar_state="expanded")
+    st.set_page_config(page_title="Stock Portfolio Dashboard", layout="wide")
     st.title("Stock Portfolio Dashboard")
 
-    
     portfolio_option = st.selectbox(
         "Select Portfolio",
         options=["MD Portfolio", "GOINVESTX Portfolio"],
@@ -79,10 +78,9 @@ def main():
 
         summary_data.rename(columns=renamed_columns, inplace=True)
 
-        # Round all numeric columns to two decimal places
-        for col in summary_data.columns:
-            if col not in ["SYMBOL"]:
-                summary_data[col] = pd.to_numeric(summary_data[col], errors='coerce').round(2)
+        # Ensure all numeric columns are rounded to two decimal places
+        numeric_cols = summary_data.select_dtypes(include=['number']).columns
+        summary_data[numeric_cols] = summary_data[numeric_cols].round(2)
 
         if "SYMBOL" not in summary_data.columns or "CLOSE" not in summary_data.columns:
             st.error("The required column SYMBOL or CLOSE is missing in the summary file.")
@@ -95,13 +93,15 @@ def main():
 
         filtered_data["BUY RATE"] = filtered_data["SYMBOL"].map(BUY_RATES)
         filtered_data["ROI (in %)"] = ((filtered_data["CLOSE"] - filtered_data["BUY RATE"]) / filtered_data["BUY RATE"]) * 100
+
+        # Ensure ROI is rounded properly
         filtered_data["ROI (in %)"] = filtered_data["ROI (in %)"].round(2)
 
         column_order = ["SYMBOL", "BUY RATE", "ROI (in %)", "CLOSE"] + \
                        [col for col in filtered_data.columns if col not in ["SYMBOL", "BUY RATE", "ROI (in %)", "CLOSE"]]
         filtered_data = filtered_data[column_order]
 
-        # **Apply color formatting to percentage columns**
+        # Apply color formatting to percentage columns
         def color_text(val):
             """Applies color formatting based on the value."""
             try:
@@ -119,24 +119,24 @@ def main():
         # Exclude SYMBOL, BUY RATE, and CLOSE from coloring
         color_columns = [col for col in filtered_data.columns if col not in ["SYMBOL", "BUY RATE", "CLOSE"]]
 
-        # **Round all numeric columns explicitly before displaying**
-        filtered_data[color_columns] = filtered_data[color_columns].applymap(lambda x: round(x, 2) if pd.notnull(x) else x)
+        # Ensure rounding before display
+        filtered_data[color_columns] = filtered_data[color_columns].round(2)
 
         # Apply styles to all percentage columns
         styled_table = filtered_data.style.applymap(color_text, subset=color_columns)
 
-        # **Ensure right alignment**
+        # Ensure right alignment
         styled_table = styled_table.set_properties(
             subset=[col for col in filtered_data.columns if col not in ["SYMBOL"]],
             **{"text-align": "right"}
         )
 
-        # **Display table using st.dataframe()**
+        # Display table using st.dataframe()
         st.subheader(f"{portfolio_option} Summary Table")
-        st.dataframe(styled_table, use_container_width=True, height=500)
+        st.dataframe(filtered_data.style.format(precision=2), use_container_width=True, height=500)
 
-        # **Provide CSV download option**
-        csv_data = filtered_data.to_csv(index=False)
+        # Provide CSV download option
+        csv_data = filtered_data.round(2).to_csv(index=False)
         st.download_button(
             label="Download Filtered Data as CSV",
             data=csv_data,
@@ -151,3 +151,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
