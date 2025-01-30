@@ -3,20 +3,22 @@ import pandas as pd
 import os
 from datetime import datetime, timedelta
 
-# Set up a dynamic file path using an environment variable
-SUMMARY_FILE_PATH = os.getenv("SUMMARY_FILE_PATH")
+# Google Drive File ID
+GOOGLE_DRIVE_FILE_ID = "1_R4z5DhZvZlbSVGqwcLUPQ_rlWY9r9bz"  # Replace with your actual file ID
 
-# Streamlit file uploader for flexibility
-uploaded_file = st.file_uploader("Upload Summary.xlsm", type=["xlsm"])
+# Function to download file from Google Drive
+def download_from_drive(file_id):
+    url = f"https://drive.google.com/uc?export=download&id={file_id}"
+    response = requests.get(url)
+    with open("Summary.xlsm", "wb") as file:
+        file.write(response.content)
+    return "Summary.xlsm"
 
-if SUMMARY_FILE_PATH and os.path.exists(SUMMARY_FILE_PATH):
-    summary_data = pd.read_excel(SUMMARY_FILE_PATH, sheet_name="Summary")
-elif uploaded_file:
-    summary_data = pd.read_excel(uploaded_file, sheet_name="Summary")
-else:
-    st.error("Please set the environment variable SUMMARY_FILE_PATH or upload the file manually.")
-    st.stop()
+# Download the latest Summary.xlsm
+SUMMARY_FILE_PATH = download_from_drive(GOOGLE_DRIVE_FILE_ID)
 
+# Load the file into a DataFrame
+summary_data = pd.read_excel(SUMMARY_FILE_PATH, sheet_name="Summary")
 # Define allowed symbols for different portfolios
 MD_ALLOWED_SYMBOLS = [
     "TARIL", "AIIL", "NETWEB", "GRAVITA", "SKYGOLD", "WEALTH", "WEBELSOLAR", "AWFIS",
