@@ -51,16 +51,7 @@ def main():
     st.set_page_config(page_title="Stock Portfolio Dashboard", layout="wide", initial_sidebar_state="expanded")
     st.title("Stock Portfolio Dashboard")
 
-    st.markdown(
-    """
-    <style>
-        body { background-color: white !important; }
-        [data-testid="stAppViewContainer"] { background-color: #f9f9f9 !important; }
-        [data-testid="stSidebar"] { background-color: #ffffff !important; }
-    </style>
-    """,
-    unsafe_allow_html=True,
-    )
+    
     portfolio_option = st.selectbox(
         "Select Portfolio",
         options=["MD Portfolio", "GOINVESTX Portfolio"],
