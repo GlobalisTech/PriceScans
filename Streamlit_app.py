@@ -3,8 +3,19 @@ import pandas as pd
 import os
 from datetime import datetime, timedelta
 
-# Define file paths
-SUMMARY_FILE_PATH = "D:\\ARHA PROJECTS\\PriceScans\\Summary.xlsm"
+# Set up a dynamic file path using an environment variable
+SUMMARY_FILE_PATH = os.getenv("SUMMARY_FILE_PATH")
+
+# Streamlit file uploader for flexibility
+uploaded_file = st.file_uploader("Upload Summary.xlsm", type=["xlsm"])
+
+if SUMMARY_FILE_PATH and os.path.exists(SUMMARY_FILE_PATH):
+    summary_data = pd.read_excel(SUMMARY_FILE_PATH, sheet_name="Summary")
+elif uploaded_file:
+    summary_data = pd.read_excel(uploaded_file, sheet_name="Summary")
+else:
+    st.error("Please set the environment variable SUMMARY_FILE_PATH or upload the file manually.")
+    st.stop()
 
 # Define allowed symbols for different portfolios
 MD_ALLOWED_SYMBOLS = [
