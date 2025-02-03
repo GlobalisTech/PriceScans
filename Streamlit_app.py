@@ -36,8 +36,15 @@ GOINVESTX_ALLOWED_SYMBOLS = [
     "TRENT", "VUENOW", "AVANITFEED", "TARIL", "DIXONTECH"
 ]
 
-# Sample Buy Rates
-BUY_RATES = {
+NEW_AGE_STOCKS = [
+    "AIIL", "ALPHALOGIC", "ANANTRAJ", "AURIONPRO", "AWFIS", "AWHCL", "CEINSYSTECH", 
+    "E2E", "ECORECO", "GOLDIAM", "INA", "KAYNES", "MINID", "NETWEB", "NEULANDLAB", 
+    "NIBE", "OLATECH", "ORIANA", "POCL", "POKARNA", "QUICKHEAL", "REFEX", "RIR", 
+    "SENCO", "SHAKTIPUMP", "SKYGOLD", "TARIL", "TECHNOE", "WEALTH", "WOCKPHARMA"
+]
+
+# Define Buy Rates
+MD_BUY_RATES = {
     "TARIL": 733.83, "AIIL": 1590.00, "NETWEB": 2779.63, "GRAVITA": 2346.30, "SKYGOLD": 271.77,
     "WEALTH": 1331.86, "WEBELSOLAR": 1378.00, "AWFIS": 732.24, "KAYNES": 5304.66, "POKARNA": 1147.92,
     "NIBE": 1977.25, "VOLTAMP": 10364.00, "AWHCL": 646.53, "SHILCTECH": 6244.00, "ANANTRAJ": 788.03,
@@ -47,17 +54,43 @@ BUY_RATES = {
     "VEEFIN": 645.00, "ORIANA": 2267.68, "INA": 419.48, "OLATECH": 432.00
 }
 
+GOINVESTX_BUY_RATES = {}
+
+NEWAGE_BUY_RATES = {}
+
+NEWAGE_BUY_RATES = {
+    "AIIL": 1653.67,"ALPHALOGIC": 165.36, "ANANTRAJ": 673.15, "AURIONPRO": 1885.5, "AWFIS": 732.24,
+    "AWHCL": 717.16, "CEINSYSTECH": 1487.43, "E2E": 3043.68, "ECORECO": 970.64, "GOLDIAM": 346.78,
+    "INA": 419.48, "KAYNES": 5304.66, "MINID": 195.81, "NETWEB": 2660.83, "NEULANDLAB": 13373.00,
+    "NIBE": 1900.08, "OLATECH": 488.00, "ORIANA": 2267.68, "POCL": 983.78, "POKARNA": 1147.92,
+    "QUICKHEAL": 656.82, "REFEX": 486.66, "RIR": 3667.91, "SENCO": 619.83, "SHAKTIPUMP": 728.05,
+    "SKYGOLD": 271.77, "TARIL": 733.83, "TECHNOE": 1549.07, "WEALTH": 1331.86, "WOCKPHARMA": 1109.2
+}
+
+
 def main():
     st.set_page_config(page_title="Stock Portfolio Dashboard", layout="wide")
     st.title("Stock Portfolio Dashboard")
 
+     # Portfolio selection
     portfolio_option = st.selectbox(
         "Select Portfolio",
-        options=["MD Portfolio", "GOINVESTX Portfolio"],
+        options=["MD Portfolio", "GOINVESTX Portfolio", "NEW AGE Portfolio"],
         index=0,
     )
 
-    ALLOWED_SYMBOLS = MD_ALLOWED_SYMBOLS if portfolio_option == "MD Portfolio" else GOINVESTX_ALLOWED_SYMBOLS
+    # Assign symbols and buy rates dynamically
+    if portfolio_option == "MD Portfolio":
+        ALLOWED_SYMBOLS = MD_ALLOWED_SYMBOLS
+        BUY_RATES = MD_BUY_RATES
+    elif portfolio_option == "GOINVESTX Portfolio":
+        ALLOWED_SYMBOLS = GOINVESTX_ALLOWED_SYMBOLS
+        BUY_RATES = GOINVESTX_BUY_RATES
+    else:
+        ALLOWED_SYMBOLS = NEW_AGE_STOCKS
+        BUY_RATES = NEWAGE_BUY_RATES
+
+    # ALLOWED_SYMBOLS = MD_ALLOWED_SYMBOLS if portfolio_option == "MD Portfolio" else GOINVESTX_ALLOWED_SYMBOLS
 
     try:
         summary_data = pd.read_excel(SUMMARY_FILE_PATH, sheet_name="Summary")
