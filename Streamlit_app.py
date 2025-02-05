@@ -11,9 +11,9 @@ GOOGLE_DRIVE_FILE_ID = "13lT8UO4HKq_3lY7MVxZptUvO8X3vTrQQw_yPZk-FPW8"
 def download_from_drive(file_id):
     url = f"https://drive.google.com/uc?export=download&id={file_id}"
     response = requests.get(url)
-    with open("Summary.xlsm", "wb") as file:
+    with open("GoogleSummary.xlsm", "wb") as file:
         file.write(response.content)
-    return "Summary.xlsm"
+    return "GoogleSummary.xlsm"
 
 # Download the latest Summary.xlsm
 SUMMARY_FILE_PATH = download_from_drive(GOOGLE_DRIVE_FILE_ID)
