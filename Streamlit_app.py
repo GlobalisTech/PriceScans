@@ -20,15 +20,15 @@ FILE_NAME = "GoogleSummary.xlsm"
 #         st.error(f"Error downloading file: {str(e)}")
 #         return None
 
-def download_from_drive(file_id):
+def download_from_drive(file_id, filename):
     url = f"https://drive.google.com/uc?export=download&id={file_id}"
     response = requests.get(url)
-    with open("GoogleSummary.xlsm", "wb") as file:
+    with open(filename, "wb") as file:
         file.write(response.content)
-    return "GoogleSummary.xlsm"
-    
+    return filename
+
 # Download file
-SUMMARY_FILE_PATH = download_from_drive(GOOGLE_DRIVE_FILE_ID)
+SUMMARY_FILE_PATH = download_from_drive(GOOGLE_DRIVE_FILE_ID, FILE_NAME)
 
 # Define allowed symbols for different portfolios
 MD_ALLOWED_SYMBOLS = [
