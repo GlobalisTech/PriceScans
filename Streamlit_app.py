@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import os
 import requests
-import gdown
+# import gdown
 from datetime import datetime, timedelta
 
 # Google Drive File ID
