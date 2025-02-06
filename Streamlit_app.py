@@ -10,39 +10,22 @@ GOOGLE_DRIVE_FILE_ID = "13lT8UO4HKq_3lY7MVxZptUvO8X3vTrQQw_yPZk-FPW8"
 FILE_NAME = "GoogleSummary.xlsm"
 
 # Function to download file from Google Drive
-# def download_from_drive(file_id, filename="GoogleSummary.xlsm"):
-#     try:
-#         url = f"https://drive.google.com/uc?export=download&id={file_id}"
-#         gdown.download(url, filename, quiet=False)
-#         print(f"Downloaded: {filename}")
-#         return filename
-#     except Exception as e:
-#         st.error(f"Error downloading file: {str(e)}")
-#         return None
-        
-# def ensure_latest_file(file_id, filename):
-#     if os.path.exists(filename):
-#         os.remove(filename)
-#     return download_from_drive(file_id, filename)
-
 def download_from_drive(file_id, filename="GoogleSummary.xlsm"):
     try:
         url = f"https://drive.google.com/uc?export=download&id={file_id}"
-        response = requests.get(url, stream=True)
-        response.raise_for_status()  # Raise an error for failed requests
-        with open(filename, "wb") as file:
-            file.write(response.content)
+        gdown.download(url, filename, quiet=False)
         print(f"Downloaded: {filename}")
         return filename
     except Exception as e:
-        print(f"Error downloading file: {str(e)}")
+        st.error(f"Error downloading file: {str(e)}")
         return None
-
+        
 def ensure_latest_file(file_id, filename):
     if os.path.exists(filename):
         os.remove(filename)
-    downloaded_file = download_from_drive(file_id, filename)
-    return downloaded_file if downloaded_file else None
+    return download_from_drive(file_id, filename)
+
+
 # def download_from_drive(file_id, filename):
 #     url = f"https://drive.google.com/uc?export=download&id={file_id}"
 #     response = requests.get(url)
