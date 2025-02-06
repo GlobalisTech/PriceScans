@@ -10,25 +10,25 @@ GOOGLE_DRIVE_FILE_ID = "13lT8UO4HKq_3lY7MVxZptUvO8X3vTrQQw_yPZk-FPW8"
 FILE_NAME = "GoogleSummary.xlsm"
 
 # Function to download file from Google Drive
-# def download_from_drive(file_id, filename="GoogleSummary.xlsm"):
-#     try:
-#         url = f"https://drive.google.com/uc?export=download&id={file_id}"
-#         gdown.download(url, filename, quiet=False)
-#         print(f"Downloaded: {filename}")
-#         return filename
-#     except Exception as e:
-#         st.error(f"Error downloading file: {str(e)}")
-#         return None
+def download_from_drive(file_id, filename="GoogleSummary.xlsm"):
+    try:
+        url = f"https://drive.google.com/uc?export=download&id={file_id}"
+        gdown.download(url, filename, quiet=False)
+        print(f"Downloaded: {filename}")
+        return filename
+    except Exception as e:
+        st.error(f"Error downloading file: {str(e)}")
+        return None
 
-def download_from_drive(file_id, filename):
-    url = f"https://drive.google.com/uc?export=download&id={file_id}"
-    response = requests.get(url)
-    with open(filename, "wb") as file:
-        file.write(response.content)
-    return filename
+# def download_from_drive(file_id, filename):
+#     url = f"https://drive.google.com/uc?export=download&id={file_id}"
+#     response = requests.get(url)
+#     with open(filename, "wb") as file:
+#         file.write(response.content)
+#     return filename
 
 # Download file
-SUMMARY_FILE_PATH = download_from_drive(GOOGLE_DRIVE_FILE_ID, FILE_NAME)
+SUMMARY_FILE_PATH = download_from_drive(GOOGLE_DRIVE_FILE_ID)
 
 # Define allowed symbols for different portfolios
 MD_ALLOWED_SYMBOLS = [
