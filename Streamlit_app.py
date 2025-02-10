@@ -93,15 +93,15 @@ def main():
     st.set_page_config(page_title="Stock Portfolio Dashboard", layout="wide")
     st.title("Stock Portfolio Dashboard")
 
-    # File Upload Option (Newly Added)
-    uploaded_file = st.file_uploader("Upload your file (.csv)", type=["csv"])
+    # # File Upload Option (Newly Added)
+    # uploaded_file = st.file_uploader("Upload your file (.csv)", type=["csv"])
 
-    if uploaded_file:
-        st.success("Uploaded file will be used.")
-        SUMMARY_FILE_PATH = uploaded_file  # Directly use the uploaded file
-    else:
-        st.info("No file uploaded. Fetching from Google Drive...")
-        SUMMARY_FILE_PATH = ensure_latest_file(GOOGLE_DRIVE_FILE_ID, FILE_NAME)
+    # if uploaded_file:
+    #     st.success("Uploaded file will be used.")
+    #     SUMMARY_FILE_PATH = uploaded_file  # Directly use the uploaded file
+    # else:
+    #     st.info("No file uploaded. Fetching from Google Drive...")
+    #     SUMMARY_FILE_PATH = ensure_latest_file(GOOGLE_DRIVE_FILE_ID, FILE_NAME)
 
      # Portfolio selection
     portfolio_option = st.selectbox(
@@ -124,8 +124,8 @@ def main():
     # ALLOWED_SYMBOLS = MD_ALLOWED_SYMBOLS if portfolio_option == "MD Portfolio" else GOINVESTX_ALLOWED_SYMBOLS
 
     try:
-        # summary_data = pd.read_excel(SUMMARY_FILE_PATH, sheet_name="Summary")
-        summary_data = pd.read_csv(SUMMARY_FILE_PATH)
+        summary_data = pd.read_excel(SUMMARY_FILE_PATH, sheet_name="Summary")
+        # summary_data = pd.read_csv(SUMMARY_FILE_PATH)
         summary_data.columns = summary_data.columns.astype(str)
 
         if "DATE1" in summary_data.columns:
