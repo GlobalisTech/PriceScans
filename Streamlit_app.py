@@ -124,7 +124,8 @@ def main():
     # ALLOWED_SYMBOLS = MD_ALLOWED_SYMBOLS if portfolio_option == "MD Portfolio" else GOINVESTX_ALLOWED_SYMBOLS
 
     try:
-        summary_data = pd.read_excel(SUMMARY_FILE_PATH, sheet_name="Summary")
+        # summary_data = pd.read_excel(SUMMARY_FILE_PATH, sheet_name="Summary")
+        summary_data = pd.read_csv(SUMMARY_FILE_PATH)
         summary_data.columns = summary_data.columns.astype(str)
 
         if "DATE1" in summary_data.columns:
