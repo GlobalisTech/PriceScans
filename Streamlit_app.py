@@ -94,7 +94,7 @@ def main():
     st.title("Stock Portfolio Dashboard")
 
     # File Upload Option (Newly Added)
-    uploaded_file = st.file_uploader("Upload your file (.xlsm)", type=["xlsm"])
+    uploaded_file = st.file_uploader("Upload your file (.csv)", type=["csv"])
 
     if uploaded_file:
         st.success("Uploaded file will be used.")
