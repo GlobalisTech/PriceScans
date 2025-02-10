@@ -93,6 +93,16 @@ def main():
     st.set_page_config(page_title="Stock Portfolio Dashboard", layout="wide")
     st.title("Stock Portfolio Dashboard")
 
+    # File Upload Option (Newly Added)
+    uploaded_file = st.file_uploader("Upload your file (.xlsm)", type=["xlsm"])
+
+    if uploaded_file:
+        st.success("Uploaded file will be used.")
+        SUMMARY_FILE_PATH = uploaded_file  # Directly use the uploaded file
+    else:
+        st.info("No file uploaded. Fetching from Google Drive...")
+        SUMMARY_FILE_PATH = ensure_latest_file(GOOGLE_DRIVE_FILE_ID, FILE_NAME)
+
      # Portfolio selection
     portfolio_option = st.selectbox(
         "Select Portfolio",
