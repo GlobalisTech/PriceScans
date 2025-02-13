@@ -1,44 +1,28 @@
 import streamlit as st
 import pandas as pd
+import plotly.graph_objects as go
 import os
 import requests
 import gdown
 from datetime import datetime, timedelta
+import numpy as np
 
-# Google Drive File ID
+# Set page config at the very beginning
+st.set_page_config(
+    page_title="Stock Portfolio Dashboard",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
+# Apply custom CSS
+with open('styles.css') as f:
+    st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+
+# Google Drive File ID and filename
 GOOGLE_DRIVE_FILE_ID = "13lT8UO4HKq_3lY7MVxZptUvO8X3vTrQQw_yPZk-FPW8"
 FILE_NAME = "GoogleSummary1.xlsm"
 
-
-
-# Function to download file from Google Drive
-def download_from_drive(file_id, filename="GoogleSummary.xlsm"):
-    try:
-        url = f"https://drive.google.com/uc?export=download&id={file_id}"
-        gdown.download(url, filename, quiet=False)
-        print(f"Downloaded: {filename}")
-        return filename
-    except Exception as e:
-        st.error(f"Error downloading file: {str(e)}")
-        return None
-        
-def ensure_latest_file(file_id, filename):
-    if os.path.exists(filename):
-        os.remove(filename)
-    return download_from_drive(file_id, filename)
-
-
-# def download_from_drive(file_id, filename):
-#     url = f"https://drive.google.com/uc?export=download&id={file_id}"
-#     response = requests.get(url)
-#     with open(filename, "wb") as file:
-#         file.write(response.content)
-#     return filename
-
-# Download file
-SUMMARY_FILE_PATH = ensure_latest_file(GOOGLE_DRIVE_FILE_ID, FILE_NAME)
-
-# Define allowed symbols for different portfolios
+# Portfolio configurations
 MD_ALLOWED_SYMBOLS = [
     "TARIL", "AIIL", "NETWEB", "GRAVITA", "SKYGOLD", "WEALTH", "WEBELSOLAR", "AWFIS",
     "KAYNES", "POKARNA", "NIBE", "VOLTAMP", "AWHCL", "SHILCTECH", "ANANTRAJ", "POCL",
@@ -60,7 +44,7 @@ NEW_AGE_STOCKS = [
     "SENCO", "SHAKTIPUMP", "SKYGOLD", "TARIL", "TECHNOE", "WEALTH", "WOCKPHARMA"
 ]
 
-# Define Buy Rates
+# Buy rates for each portfolio
 MD_BUY_RATES = {
     "TARIL": 733.83, "AIIL": 1590.00, "NETWEB": 2779.63, "GRAVITA": 2346.30, "SKYGOLD": 271.77,
     "WEALTH": 1331.86, "WEBELSOLAR": 1378.00, "AWFIS": 732.24, "KAYNES": 5304.66, "POKARNA": 1147.92,
@@ -72,149 +56,188 @@ MD_BUY_RATES = {
 }
 
 GOINVESTX_BUY_RATES = {
-    "RIR": 3625.68, "MINID": 190.67, "VUENOW": 191.36, "KAYNES": 6662.37, "AVANTIFEED": 681.04, "CYIENT": 1426.32,
-    "DIXON": 15642.97, "E2E": 3317.01, "REFEX": 473.48, "TARIL": 932.29, "CEINSYSTECH": 1678.61, "SHAKTIPUMP": 990.10,
-    "BEL": 290.69, "BDL": 1324.02, "OLECTRA": 1447.79, "HAL": 3926.65, "INA": 306.86, "SAGILITY": 48.97, "POWERINDIA": 11380.35,
-    "GILLETTE": 8892.50
+    "RIR": 3625.68, "MINID": 190.67, "VUENOW": 191.36, "KAYNES": 6662.37, "AVANTIFEED": 681.04,
+    "CYIENT": 1426.32, "DIXON": 15642.97, "E2E": 3317.01, "REFEX": 473.48, "TARIL": 932.29,
+    "CEINSYSTECH": 1678.61, "SHAKTIPUMP": 990.10, "BEL": 290.69, "BDL": 1324.02, "OLECTRA": 1447.79,
+    "HAL": 3926.65, "INA": 306.86, "SAGILITY": 48.97, "POWERINDIA": 11380.35, "GILLETTE": 8892.50
 }
-
-
-NEWAGE_BUY_RATES = {}
 
 NEWAGE_BUY_RATES = {
-    "AIIL": 1653.67,"ALPHALOGIC": 165.36, "ANANTRAJ": 673.15, "AURIONPRO": 1885.5, "AWFIS": 732.24,
-    "AWHCL": 717.16, "CEINSYSTECH": 1487.43, "E2E": 3043.68, "ECORECO": 970.64, "GOLDIAM": 346.78,
-    "INA": 419.48, "KAYNES": 5304.66, "MINID": 195.81, "NETWEB": 2660.83, "NEULANDLAB": 13373.00,
-    "NIBE": 1900.08, "OLATECH": 488.00, "ORIANA": 2267.68, "POCL": 983.78, "POKARNA": 1147.92,
-    "QUICKHEAL": 656.82, "REFEX": 486.66, "RIR": 3667.91, "SENCO": 619.83, "SHAKTIPUMP": 728.05,
-    "SKYGOLD": 271.77, "TARIL": 733.83, "TECHNOE": 1549.07, "WEALTH": 1331.86, "WOCKPHARMA": 1109.2
+    "AIIL": 1653.67, "ALPHALOGIC": 165.36, "ANANTRAJ": 673.15, "AURIONPRO": 1885.5,
+    "AWFIS": 732.24, "AWHCL": 717.16, "CEINSYSTECH": 1487.43, "E2E": 3043.68,
+    "ECORECO": 970.64, "GOLDIAM": 346.78, "INA": 419.48, "KAYNES": 5304.66,
+    "MINID": 195.81, "NETWEB": 2660.83, "NEULANDLAB": 13373.00, "NIBE": 1900.08,
+    "OLATECH": 488.00, "ORIANA": 2267.68, "POCL": 983.78, "POKARNA": 1147.92,
+    "QUICKHEAL": 656.82, "REFEX": 486.66, "RIR": 3667.91, "SENCO": 619.83,
+    "SHAKTIPUMP": 728.05, "SKYGOLD": 271.77, "TARIL": 733.83, "TECHNOE": 1549.07,
+    "WEALTH": 1331.86, "WOCKPHARMA": 1109.2
 }
 
+@st.cache_data(ttl=300)
+def download_from_drive(file_id, filename):
+    try:
+        url = f"https://drive.google.com/uc?export=download&id={file_id}"
+        gdown.download(url, filename, quiet=False)
+        return filename
+    except Exception as e:
+        st.error(f"Error downloading file: {str(e)}")
+        return None
 
-def main():
-    st.set_page_config(page_title="Stock Portfolio Dashboard", layout="wide")
-    st.title("Stock Portfolio Dashboard")
+def generate_sample_data(symbols, buy_rates):
+    today = datetime.now()
+    dates = [(today - timedelta(days=i)).strftime('%Y-%m-%d') for i in range(5)]
 
-    # # File Upload Option (Newly Added)
-    # uploaded_file = st.file_uploader("Upload your file (.csv)", type=["csv"])
+    data = []
+    for symbol in symbols:
+        close_price = buy_rates[symbol] * (1 + np.random.uniform(-0.1, 0.2))
+        row = {'SYMBOL': symbol, 'CLOSE': close_price}
 
-    # if uploaded_file:
-    #     st.success("Uploaded file will be used.")
-    #     SUMMARY_FILE_PATH = uploaded_file  # Directly use the uploaded file
-    # else:
-    #     st.info("No file uploaded. Fetching from Google Drive...")
-    #     SUMMARY_FILE_PATH = ensure_latest_file(GOOGLE_DRIVE_FILE_ID, FILE_NAME)
+        for date in dates:
+            change = np.random.uniform(-5, 8)
+            row[date] = change
 
-     # Portfolio selection
-    portfolio_option = st.selectbox(
-        "Select Portfolio",
-        options=["MD Portfolio", "GOINVESTX Portfolio", "NEW AGE Portfolio"],
-        index=0,
+        data.append(row)
+
+    return pd.DataFrame(data)
+
+@st.cache_data(ttl=300)
+def load_and_process_data(filename, allowed_symbols, buy_rates):
+    try:
+        # Try to load the actual file
+        if os.path.exists(filename):
+            data = pd.read_excel(filename, sheet_name="Summary")
+        else:
+            st.info("Using sample data for demonstration")
+            data = generate_sample_data(allowed_symbols, buy_rates)
+
+        # Process columns
+        data.columns = data.columns.astype(str)
+        if "DATE1" in data.columns:
+            data.drop(columns=["DATE1"], inplace=True)
+
+        # Handle date columns
+        date_cols = [col for col in data.columns if "-" in col and col[:4].isdigit()]
+        dates = {col: pd.to_datetime(col).strftime('%d %b').upper() for col in date_cols}
+
+        # Rename columns
+        rename_dict = {}
+        for col in data.columns:
+            if col in dates:
+                rename_dict[col] = f"{dates[col]} (in %)"
+            elif col not in ["SYMBOL", "CLOSE", "BUY RATE"]:
+                rename_dict[col] = f"{col} (in %)"
+
+        data.rename(columns=rename_dict, inplace=True)
+
+        # Filter and process data
+        data["SYMBOL"] = data["SYMBOL"].fillna("UNKNOWN")
+        filtered = data[data["SYMBOL"].isin(allowed_symbols)].copy()
+        filtered.reset_index(drop=True, inplace=True)
+        filtered.index += 1
+
+        # Calculate ROI
+        filtered["BUY RATE"] = filtered["SYMBOL"].map(buy_rates)
+        filtered["ROI (in %)"] = ((filtered["CLOSE"] - filtered["BUY RATE"]) / filtered["BUY RATE"] * 100).round(2)
+
+        # Order columns
+        cols = ["SYMBOL", "BUY RATE", "ROI (in %)", "CLOSE"]
+        cols.extend([col for col in filtered.columns if col not in cols])
+        filtered = filtered[cols]
+
+        return filtered
+
+    except Exception as e:
+        st.error(f"Error processing data: {str(e)}")
+        return None
+
+def create_performance_chart(data):
+    roi_data = data.sort_values("ROI (in %)")
+
+    fig = go.Figure()
+    colors = roi_data["ROI (in %)"].apply(lambda x: 'red' if x < 0 else 'green' if x <= 5 else 'blue')
+
+    fig.add_trace(go.Bar(
+        x=roi_data["SYMBOL"],
+        y=roi_data["ROI (in %)"],
+        marker_color=colors,
+        name="ROI"
+    ))
+
+    fig.update_layout(
+        title="Portfolio Performance by Stock",
+        xaxis_title="Stock Symbol",
+        yaxis_title="ROI (%)",
+        template="plotly_white",
+        height=400,
+        showlegend=False
     )
 
-    # Assign symbols and buy rates dynamically
-    if portfolio_option == "MD Portfolio":
-        ALLOWED_SYMBOLS = MD_ALLOWED_SYMBOLS
-        BUY_RATES = MD_BUY_RATES
-    elif portfolio_option == "GOINVESTX Portfolio":
-        ALLOWED_SYMBOLS = GOINVESTX_ALLOWED_SYMBOLS
-        BUY_RATES = GOINVESTX_BUY_RATES
+    return fig
+
+def main():
+    st.title("Stock Portfolio Dashboard")
+
+    # Portfolio selection
+    portfolio = st.selectbox(
+        "Select Portfolio",
+        ["MD Portfolio", "GOINVESTX Portfolio", "NEW AGE Portfolio"]
+    )
+
+    # Map selection to data
+    if portfolio == "MD Portfolio":
+        symbols = MD_ALLOWED_SYMBOLS
+        rates = MD_BUY_RATES
+    elif portfolio == "GOINVESTX Portfolio":
+        symbols = GOINVESTX_ALLOWED_SYMBOLS
+        rates = GOINVESTX_BUY_RATES
     else:
-        ALLOWED_SYMBOLS = NEW_AGE_STOCKS
-        BUY_RATES = NEWAGE_BUY_RATES
+        symbols = NEW_AGE_STOCKS
+        rates = NEWAGE_BUY_RATES
 
-    # ALLOWED_SYMBOLS = MD_ALLOWED_SYMBOLS if portfolio_option == "MD Portfolio" else GOINVESTX_ALLOWED_SYMBOLS
+    # Load and process data
+    data = load_and_process_data(FILE_NAME, symbols, rates)
 
-    try:
-        summary_data = pd.read_excel(SUMMARY_FILE_PATH, sheet_name="Summary")
-        # summary_data = pd.read_csv(SUMMARY_FILE_PATH)
-        summary_data.columns = summary_data.columns.astype(str)
+    if data is not None:
+        # Portfolio metrics
+        col1, col2, col3 = st.columns(3)
 
-        if "DATE1" in summary_data.columns:
-            summary_data.drop(columns=["DATE1"], inplace=True)
+        with col1:
+            avg_roi = data["ROI (in %)"].mean()
+            st.metric("Average ROI", f"{avg_roi:.2f}%")
 
-        dynamic_columns = [col for col in summary_data.columns if "-" in col and col[:4].isdigit()]
-        date_mapping = {col: pd.to_datetime(col, errors='coerce').date() for col in dynamic_columns}
-        sorted_dynamic_columns = sorted(date_mapping, key=date_mapping.get)
+        with col2:
+            profitable = len(data[data["ROI (in %)"] > 0])
+            st.metric("Stocks in Profit", profitable)
 
-        renamed_columns = {col: date_mapping[col].strftime('%d %b').upper() for col in sorted_dynamic_columns}
+        with col3:
+            best = data.loc[data["ROI (in %)"].idxmax()]
+            st.metric("Top Performer", f"{best['SYMBOL']} ({best['ROI (in %)']}%)")
 
-        for col in summary_data.columns:
-            if col not in ["SYMBOL", "CLOSE", "BUY RATE"]:
-                renamed_columns[col] = f"{renamed_columns.get(col, col)} (in %)"
+        # Performance chart
+        st.plotly_chart(create_performance_chart(data), use_container_width=True)
 
-        summary_data.rename(columns=renamed_columns, inplace=True)
-
-        # Ensure all numeric columns are rounded to two decimal places
-        numeric_cols = summary_data.select_dtypes(include=['number']).columns
-        summary_data[numeric_cols] = summary_data[numeric_cols].round(2)
-
-        if "SYMBOL" not in summary_data.columns or "CLOSE" not in summary_data.columns:
-            st.error("The required column SYMBOL or CLOSE is missing in the summary file.")
-            return
-
-        summary_data["SYMBOL"] = summary_data["SYMBOL"].fillna("UNKNOWN").astype(str)
-        filtered_data = summary_data[summary_data["SYMBOL"].isin(ALLOWED_SYMBOLS)]
-        filtered_data.reset_index(drop=True, inplace=True)
-        filtered_data.index = filtered_data.index + 1
-
-        filtered_data["BUY RATE"] = filtered_data["SYMBOL"].map(BUY_RATES)
-        filtered_data["ROI (in %)"] = ((filtered_data["CLOSE"] - filtered_data["BUY RATE"]) / filtered_data["BUY RATE"]) * 100
-
-        # Ensure ROI is rounded properly
-        filtered_data["ROI (in %)"] = filtered_data["ROI (in %)"].round(2)
-
-        column_order = ["SYMBOL", "BUY RATE", "ROI (in %)", "CLOSE"] + \
-                       [col for col in filtered_data.columns if col not in ["SYMBOL", "BUY RATE", "ROI (in %)", "CLOSE"]]
-        filtered_data = filtered_data[column_order]
-
-        # Apply color formatting to percentage columns
-        def color_text(val):
-            """Applies color formatting based on the value."""
-            try:
-                num_val = float(val)
-                if num_val > 5:
-                    return "color: blue; font-weight: bold;"
-                elif 0 < num_val <= 5:
-                    return "color: green; font-weight: bold;"
-                elif num_val < 0:
-                    return "color: red; font-weight: bold;"
-                return ""
-            except:
-                return ""
-
-        # Exclude SYMBOL, BUY RATE, and CLOSE from coloring
-        color_columns = [col for col in filtered_data.columns if col not in ["SYMBOL", "BUY RATE", "CLOSE"]]
-
-        # Ensure rounding before display
-        filtered_data[color_columns] = filtered_data[color_columns].round(2)
-
-        # Apply styles to all percentage columns
-        styled_table = filtered_data.style.applymap(color_text, subset=color_columns)
-
-        # Ensure right alignment
-        styled_table = styled_table.set_properties(
-            subset=[col for col in filtered_data.columns if col not in ["SYMBOL"]],
-            **{"text-align": "right"}
+        # Data table
+        st.subheader(f"{portfolio} Summary Table")
+        st.dataframe(
+            data.style.format(precision=2)
+            .apply(lambda x: [
+                'color: red; font-weight: bold' if isinstance(v, (int, float)) and v < 0 else
+                'color: green; font-weight: bold' if isinstance(v, (int, float)) and 0 < v <= 5 else
+                'color: blue; font-weight: bold' if isinstance(v, (int, float)) and v > 5 else
+                '' for v in x
+            ], axis=1),
+            use_container_width=True,
+            height=500
         )
 
-        # Display table using st.dataframe()
-        st.subheader(f"{portfolio_option} Summary Table")
-        st.dataframe(filtered_data.style.format(precision=2), use_container_width=True, height=500)
-
-        # Provide CSV download option
-        csv_data = filtered_data.round(2).to_csv(index=False)
+        # Download option
+        csv = data.to_csv(index=False).encode('utf-8')
         st.download_button(
-            label="Download Filtered Data as CSV",
-            data=csv_data,
-            file_name=f"{portfolio_option.lower().replace(' ', '_')}_summary.csv",
-            mime="text/csv",
+            "📥 Download Data as CSV",
+            csv,
+            f"{portfolio.lower().replace(' ', '_')}_{datetime.now().strftime('%Y%m%d')}.csv",
+            "text/csv"
         )
-
-    except FileNotFoundError:
-        st.error(f"Summary file not found at {SUMMARY_FILE_PATH}. Please upload it to the correct location.")
-    except Exception as e:
-        st.error(f"An error occurred: {str(e)}")
 
 if __name__ == "__main__":
     main()
