@@ -169,6 +169,7 @@ def create_performance_chart(data):
         yaxis_title="ROI (%)",
         template="plotly_white",
         height=400,
+        width = 1000,
         showlegend=False
     )
 
@@ -227,7 +228,8 @@ def main():
                 '' for v in x
             ], axis=1),
             use_container_width=True,
-            height=500
+            height=500,
+            width=1000
         )
 
         # Download option
