@@ -167,10 +167,10 @@ def create_performance_chart(data):
         title="Portfolio Performance by Stock",
         xaxis_title="Stock Symbol",
         yaxis_title="ROI (%)",
-        template="plotly_white",
+        template="plotly_dark",
         height=400,
         # width = 1000,
-        showlegend=False
+        showlegend=True
     )
 
     return fig
@@ -227,8 +227,8 @@ def main():
                 'color: blue; font-weight: bold' if isinstance(v, (int, float)) and v > 5 else
                 '' for v in x
             ], axis=1),
-            # use_container_width=False,
-            # height=500,
+            use_container_width=True,
+            height=500,
             # height=1000
         )
 
