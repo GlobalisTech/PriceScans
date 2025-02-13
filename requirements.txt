@@ -4,3 +4,4 @@ requests
 openpyxl
 xlwings
 gdown
+plotly
