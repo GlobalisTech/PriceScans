@@ -170,7 +170,8 @@ def create_performance_chart(data):
         template="plotly_dark",
         height=400,
         # width = 1000,
-        showlegend=True
+        showlegend=False,
+        xaxis=dict(tickangle=0) 
     )
 
     return fig
