@@ -1,6 +1,6 @@
 .stApp {
     max-width: 1600px;
-    max-height: 2600px;
+/*     max-height: 2600px; */
     margin: 0 auto;
 }
 
@@ -12,7 +12,8 @@
 }
 
 .portfolio-metrics {
-    background-color: #f8f9fa;
+/*     background-color: #f8f9fa; */
+    background-color: #000000;
     padding: 1rem;
     border-radius: 8px;
     margin: 1rem 0;
@@ -20,7 +21,7 @@
 }
 
 .metric-card {
-    background: white;
+    background: yellow;
     padding: 1rem;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
