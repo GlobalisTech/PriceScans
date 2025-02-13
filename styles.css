@@ -6,7 +6,8 @@
 
 .main-header {
     text-align: center;
-    color: #0068c9;
+/*     color: #0068c9; */
+    color : #FFA500;
     padding: 1rem 0;
     margin-bottom: 2rem;
 }
