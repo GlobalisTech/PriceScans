@@ -165,19 +165,11 @@ def create_performance_chart(data):
 
     fig.update_layout(
         title="Portfolio Performance by Stock",
-        # xaxis_title="Stock Symbol",
-        xaxis=dict(
-            title="Stock Symbol",
-            title_font=dict(color="black"),  # Sets "Stock Symbol" font color to black
-            tickangle=270,  # Keeps x-axis labels horizontal
-            tickfont=dict(size=14, color="orange")
-        ),
+        xaxis_title="Stock Symbol",
         yaxis_title="ROI (%)",
-        template="plotly_dark",
+        template="plotly_white",
         height=400,
-        # width = 1000,
-        showlegend=False,
-        # xaxis=dict(tickangle=270) 
+        showlegend=False
     )
 
     return fig
@@ -226,19 +218,6 @@ def main():
 
         # Data table
         st.subheader(f"{portfolio} Summary Table")
-        # st.dataframe(
-        #     data.style.format(precision=2)
-        #     .apply(lambda x: [
-        #         'color: red; font-weight: bold' if isinstance(v, (int, float)) and v < 0 else
-        #         'color: green; font-weight: bold' if isinstance(v, (int, float)) and 0 < v <= 5 else
-        #         'color: blue; font-weight: bold' if isinstance(v, (int, float)) and v > 5 else
-        #         '' for v in x
-        #     ], axis=1),
-        #     use_container_width=True,
-        #     height=500,
-        #     # height=1000
-        # )
-
         st.dataframe(
             data.style.format(precision=2)
             .apply(lambda x: [
@@ -246,10 +225,10 @@ def main():
                 'color: green; font-weight: bold' if isinstance(v, (int, float)) and 0 < v <= 5 else
                 'color: orange; font-weight: bold' if isinstance(v, (int, float)) and v > 5 else
                 '' for v in x
-            ], axis=1)
-            .set_table_styles([{"selector": "thead th", "props": [("color", "black"), ("font-weight", "bold")]}]),
+            ], axis=1),
             use_container_width=True,
             height=500,
+            hide_index=True  # Hide index for more space
         )
 
         # Download option
