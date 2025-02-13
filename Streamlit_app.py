@@ -227,9 +227,9 @@ def main():
                 'color: blue; font-weight: bold' if isinstance(v, (int, float)) and v > 5 else
                 '' for v in x
             ], axis=1),
-            use_container_width=True,
+            use_container_width=False,
             height=500,
-            height=1000
+            # height=1000
         )
 
         # Download option
