@@ -112,6 +112,22 @@ def load_and_process_data(filename, allowed_symbols, buy_rates):
 
         # Process columns
         data.columns = data.columns.astype(str)
+        if "DATE1" in data.columns:
+            data.drop(columns=["DATE1"], inplace=True)
+
+        # Handle date columns
+        date_cols = [col for col in data.columns if "-" in col and col[:4].isdigit()]
+        dates = {col: pd.to_datetime(col).strftime('%d %b').upper() for col in date_cols}
+
+        # Rename columns
+        rename_dict = {}
+        for col in data.columns:
+            if col in dates:
+                rename_dict[col] = f"{dates[col]} (in %)"
+            elif col not in ["SYMBOL", "CLOSE", "BUY RATE"]:
+                rename_dict[col] = f"{col} (in %)"
+
+        data.rename(columns=rename_dict, inplace=True)
 
         # Filter and process data
         data["SYMBOL"] = data["SYMBOL"].fillna("UNKNOWN")
@@ -121,12 +137,12 @@ def load_and_process_data(filename, allowed_symbols, buy_rates):
 
         # Calculate ROI
         filtered["BUY RATE"] = filtered["SYMBOL"].map(buy_rates)
-        filtered["ROI (%)"] = ((filtered["CLOSE"] - filtered["BUY RATE"]) / filtered["BUY RATE"] * 100).round(2)
+        filtered["ROI (in %)"] = ((filtered["CLOSE"] - filtered["BUY RATE"]) / filtered["BUY RATE"] * 100).round(2)
 
-        # Ensure proper column order
-        date_cols = [col for col in filtered.columns if col not in ["SYMBOL", "CLOSE", "BUY RATE", "ROI (%)"]]
-        column_order = ["SYMBOL", "CLOSE", "ROI (%)", "BUY RATE"] + date_cols
-        filtered = filtered[column_order]
+        # Order columns
+        cols = ["SYMBOL", "BUY RATE", "ROI (in %)", "CLOSE"]
+        cols.extend([col for col in filtered.columns if col not in cols])
+        filtered = filtered[cols]
 
         return filtered
 
@@ -135,25 +151,33 @@ def load_and_process_data(filename, allowed_symbols, buy_rates):
         return None
 
 def create_performance_chart(data):
-    roi_data = data.sort_values("ROI (%)")
+    roi_data = data.sort_values("ROI (in %)")
 
     fig = go.Figure()
-    colors = roi_data["ROI (%)"].apply(lambda x: 'red' if x < 0 else 'green' if x <= 5 else 'blue')
+    colors = roi_data["ROI (in %)"].apply(lambda x: 'red' if x < 0 else 'green' if x <= 5 else 'orange')
 
     fig.add_trace(go.Bar(
         x=roi_data["SYMBOL"],
-        y=roi_data["ROI (%)"],
+        y=roi_data["ROI (in %)"],
         marker_color=colors,
         name="ROI"
     ))
 
     fig.update_layout(
         title="Portfolio Performance by Stock",
-        xaxis_title="Stock Symbol",
+        # xaxis_title="Stock Symbol",
+        xaxis=dict(
+            title="Stock Symbol",
+            title_font=dict(color="black"),  # Sets "Stock Symbol" font color to black
+            tickangle=270,  # Keeps x-axis labels horizontal
+            tickfont=dict(size=14, color="orange")
+        ),
         yaxis_title="ROI (%)",
-        template="plotly_white",
+        template="plotly_dark",
         height=400,
-        showlegend=False
+        # width = 1000,
+        showlegend=False,
+        # xaxis=dict(tickangle=270) 
     )
 
     return fig
@@ -186,16 +210,16 @@ def main():
         col1, col2, col3 = st.columns(3)
 
         with col1:
-            avg_roi = data["ROI (%)"].mean()
+            avg_roi = data["ROI (in %)"].mean()
             st.metric("Average ROI", f"{avg_roi:.2f}%")
 
         with col2:
-            profitable = len(data[data["ROI (%)"] > 0])
+            profitable = len(data[data["ROI (in %)"] > 0])
             st.metric("Stocks in Profit", profitable)
 
         with col3:
-            best = data.loc[data["ROI (%)"].idxmax()]
-            st.metric("Top Performer", f"{best['SYMBOL']} ({best['ROI (%)']}%)")
+            best = data.loc[data["ROI (in %)"].idxmax()]
+            st.metric("Top Performer", f"{best['SYMBOL']} ({best['ROI (in %)']}%)")
 
         # Performance chart
         st.plotly_chart(create_performance_chart(data), use_container_width=True)
@@ -212,8 +236,21 @@ def main():
             ], axis=1),
             use_container_width=True,
             height=500,
-            hide_index=True  # Hide index for more space
+            # height=1000
         )
+
+        # st.dataframe(
+        #     data.style.format(precision=2)
+        #     .apply(lambda x: [
+        #         'color: red; font-weight: bold' if isinstance(v, (int, float)) and v < 0 else
+        #         'color: green; font-weight: bold' if isinstance(v, (int, float)) and 0 < v <= 5 else
+        #         'color: orange; font-weight: bold' if isinstance(v, (int, float)) and v > 5 else
+        #         '' for v in x
+        #     ], axis=1)
+        #     .set_table_styles([{"selector": "thead th", "props": [("color", "black"), ("font-weight", "bold")]}]),
+        #     use_container_width=True,
+        #     height=500,
+        # )
 
         # Download option
         csv = data.to_csv(index=False).encode('utf-8')
