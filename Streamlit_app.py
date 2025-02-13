@@ -165,13 +165,18 @@ def create_performance_chart(data):
 
     fig.update_layout(
         title="Portfolio Performance by Stock",
-        xaxis_title="Stock Symbol",
+        # xaxis_title="Stock Symbol",
+        xaxis=dict(
+            title="Stock Symbol",
+            title_font=dict(color="black"),  # Sets "Stock Symbol" font color to black
+            tickangle=270  # Keeps x-axis labels horizontal
+        ),
         yaxis_title="ROI (%)",
         template="plotly_dark",
         height=400,
         # width = 1000,
         showlegend=False,
-        xaxis=dict(tickangle=90) 
+        # xaxis=dict(tickangle=270) 
     )
 
     return fig
