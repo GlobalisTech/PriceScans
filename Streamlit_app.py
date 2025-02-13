@@ -170,7 +170,7 @@ def create_performance_chart(data):
             title="Stock Symbol",
             title_font=dict(color="black"),  # Sets "Stock Symbol" font color to black
             tickangle=270,  # Keeps x-axis labels horizontal
-            tickfont=dict(size=14, color="black")
+            tickfont=dict(size=14, color="blue")
         ),
         yaxis_title="ROI (%)",
         template="plotly_dark",
