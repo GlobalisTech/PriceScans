@@ -24,52 +24,28 @@ FILE_NAME = "GoogleSummary1.xlsm"
 
 # Portfolio configurations
 MD_ALLOWED_SYMBOLS = [
-    "TARIL", "AIIL", "NETWEB", "GRAVITA", "SKYGOLD", "WEALTH", "WEBELSOLAR", "AWFIS",
-    "KAYNES", "POKARNA", "NIBE", "VOLTAMP", "AWHCL", "SHILCTECH", "ANANTRAJ", "POCL",
-    "GOLDIAM", "REFEX", "RIR", "TECHNOE", "ECORECO", "CEINSYSTECH", "E2E", "MINID",
-    "QUICKHEAL", "SHAKTIPUMP", "WOCKPHARMA", "NEULANDLAB", "SENCO", "VEEFIN", "INA",
-    "OLATECH", "ORIANA"
+    "TARIL", 
 ]
 
 GOINVESTX_ALLOWED_SYMBOLS = [
-    "RIR", "MINID", "VUENOW", "KAYNES", "AVANTIFEED", "CYIENT", "DIXON", "E2E",
-    "REFEX", "TARIL", "CEINSYSTECH", "SHAKTIPUMP", "BEL", "BDL", "OLECTRA", "HAL",
-    "INA", "SAGILITY", "POWERINDIA", "GILLETTE"
+    "RIR",  "SAGILITY", "POWERINDIA", "GILLETTE"
 ]
 
 NEW_AGE_STOCKS = [
-    "AIIL", "ALPHALOGIC", "ANANTRAJ", "AURIONPRO", "AWFIS", "AWHCL", "CEINSYSTECH", 
-    "E2E", "ECORECO", "GOLDIAM", "INA", "KAYNES", "MINID", "NETWEB", "NEULANDLAB", 
-    "NIBE", "OLATECH", "ORIANA", "POCL", "POKARNA", "QUICKHEAL", "REFEX", "RIR", 
-    "SENCO", "SHAKTIPUMP", "SKYGOLD", "TARIL", "TECHNOE", "WEALTH", "WOCKPHARMA"
+    "AIIL",  "SHAKTIPUMP", "SKYGOLD", "TARIL", "TECHNOE", "WEALTH", "WOCKPHARMA"
 ]
 
 # Buy rates for each portfolio
 MD_BUY_RATES = {
-    "TARIL": 733.83, "AIIL": 1590.00, "NETWEB": 2779.63, "GRAVITA": 2346.30, "SKYGOLD": 271.77,
-    "WEALTH": 1331.86, "WEBELSOLAR": 1378.00, "AWFIS": 732.24, "KAYNES": 5304.66, "POKARNA": 1147.92,
-    "NIBE": 1977.25, "VOLTAMP": 10364.00, "AWHCL": 646.53, "SHILCTECH": 6244.00, "ANANTRAJ": 788.03,
-    "POCL": 983.78, "GOLDIAM": 398.33, "REFEX": 486.66, "RIR": 3667.91, "TECHNOE": 1549.07,
-    "ECORECO": 890.78, "CEINSYSTECH": 1487.43, "E2E": 4069.52, "MINID": 184.48, "QUICKHEAL": 656.82,
-    "SHAKTIPUMP": 980.02, "WOCKPHARMA": 1196.21, "NEULANDLAB": 13373.00, "SENCO": 1175.06,
-    "VEEFIN": 645.00, "ORIANA": 2267.68, "INA": 419.48, "OLATECH": 432.00
+    "TARIL": 733.83, 
 }
 
 GOINVESTX_BUY_RATES = {
-    "RIR": 3625.68, "MINID": 190.67, "VUENOW": 191.36, "KAYNES": 6662.37, "AVANTIFEED": 681.04,
-    "CYIENT": 1426.32, "DIXON": 15642.97, "E2E": 3317.01, "REFEX": 473.48, "TARIL": 932.29,
-    "CEINSYSTECH": 1678.61, "SHAKTIPUMP": 990.10, "BEL": 290.69, "BDL": 1324.02, "OLECTRA": 1447.79,
-    "HAL": 3926.65, "INA": 306.86, "SAGILITY": 48.97, "POWERINDIA": 11380.35, "GILLETTE": 8892.50
+    "RIR": 3625.68, "SAGILITY": 48.97, "POWERINDIA": 11380.35, "GILLETTE": 8892.50
 }
 
 NEWAGE_BUY_RATES = {
-    "AIIL": 1653.67, "ALPHALOGIC": 165.36, "ANANTRAJ": 673.15, "AURIONPRO": 1885.5,
-    "AWFIS": 732.24, "AWHCL": 717.16, "CEINSYSTECH": 1487.43, "E2E": 3043.68,
-    "ECORECO": 970.64, "GOLDIAM": 346.78, "INA": 419.48, "KAYNES": 5304.66,
-    "MINID": 195.81, "NETWEB": 2660.83, "NEULANDLAB": 13373.00, "NIBE": 1900.08,
-    "OLATECH": 488.00, "ORIANA": 2267.68, "POCL": 983.78, "POKARNA": 1147.92,
-    "QUICKHEAL": 656.82, "REFEX": 486.66, "RIR": 3667.91, "SENCO": 619.83,
-    "SHAKTIPUMP": 728.05, "SKYGOLD": 271.77, "TARIL": 733.83, "TECHNOE": 1549.07,
+    "AIIL": 1653.67,  "SHAKTIPUMP": 728.05, "SKYGOLD": 271.77, "TARIL": 733.83, "TECHNOE": 1549.07,
     "WEALTH": 1331.86, "WOCKPHARMA": 1109.2
 }
 
@@ -83,33 +59,26 @@ def download_from_drive(file_id, filename):
         st.error(f"Error downloading file: {str(e)}")
         return None
 
-def generate_sample_data(symbols, buy_rates):
-    today = datetime.now()
-    dates = [(today - timedelta(days=i)).strftime('%Y-%m-%d') for i in range(5)]
-
-    data = []
-    for symbol in symbols:
-        close_price = buy_rates[symbol] * (1 + np.random.uniform(-0.1, 0.2))
-        row = {'SYMBOL': symbol, 'CLOSE': close_price}
-
-        for date in dates:
-            change = np.random.uniform(-5, 8)
-            row[date] = change
-
-        data.append(row)
-
-    return pd.DataFrame(data)
+def load_local_data(filename):
+    try:
+        if os.path.exists(filename):
+            return pd.read_excel(filename, sheet_name="Summary")
+        else:
+            st.error(f"File {filename} not found locally.")
+            return None
+    except Exception as e:
+        st.error(f"Error loading local file: {str(e)}")
+        return None
 
 @st.cache_data(ttl=300)
 def load_and_process_data(filename, allowed_symbols, buy_rates):
     try:
         # Try to load the actual file
-        if os.path.exists(filename):
-            data = pd.read_excel(filename, sheet_name="Summary")
-        else:
-            st.info("Failed to download file")
-            # st.info("Using sample data for demonstration")
-            # data = generate_sample_data(allowed_symbols, buy_rates)
+        data = load_local_data(filename)
+        
+        if data is None:
+            st.info("Using sample data for demonstration")
+            data = generate_sample_data(allowed_symbols, buy_rates)
 
         # Process columns
         data.columns = data.columns.astype(str)
@@ -166,19 +135,16 @@ def create_performance_chart(data):
 
     fig.update_layout(
         title="Portfolio Performance by Stock",
-        # xaxis_title="Stock Symbol",
         xaxis=dict(
             title="Stock Symbol",
-            title_font=dict(color="black"),  # Sets "Stock Symbol" font color to black
-            tickangle=270,  # Keeps x-axis labels horizontal
+            title_font=dict(color="black"),
+            tickangle=270,
             tickfont=dict(size=14, color="orange")
         ),
         yaxis_title="ROI (%)",
         template="plotly_dark",
         height=400,
-        # width = 1000,
         showlegend=False,
-        # xaxis=dict(tickangle=270) 
     )
 
     return fig
@@ -237,21 +203,7 @@ def main():
             ], axis=1),
             use_container_width=True,
             height=500,
-            # height=1000
         )
-
-        # st.dataframe(
-        #     data.style.format(precision=2)
-        #     .apply(lambda x: [
-        #         'color: red; font-weight: bold' if isinstance(v, (int, float)) and v < 0 else
-        #         'color: green; font-weight: bold' if isinstance(v, (int, float)) and 0 < v <= 5 else
-        #         'color: orange; font-weight: bold' if isinstance(v, (int, float)) and v > 5 else
-        #         '' for v in x
-        #     ], axis=1)
-        #     .set_table_styles([{"selector": "thead th", "props": [("color", "black"), ("font-weight", "bold")]}]),
-        #     use_container_width=True,
-        #     height=500,
-        # )
 
         # Download option
         csv = data.to_csv(index=False).encode('utf-8')
