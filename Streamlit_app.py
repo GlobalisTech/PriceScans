@@ -10,52 +10,7 @@ GOOGLE_DRIVE_FILE_ID = "13lT8UO4HKq_3lY7MVxZptUvO8X3vTrQQw_yPZk-FPW8"
 FILE_NAME = "GoogleSummary1.xlsm"
 
 
-# Apply CSS Styling
-st.markdown(
-    """
-    <style>
-    /* Custom Styling for Dashboard */
-    h1, h2, h3 {
-        font-family: 'Arial', sans-serif;
-        font-weight: bold;
-        color: black;
-    }
 
-    /* Italicize Table Headers */
-    table thead th {
-        font-style: italic;
-        font-size: 16px;
-        color: black;
-        font-weight: bold;
-    }
-
-    /* Bold Table Data */
-    table tbody td {
-        font-weight: bold;
-        font-size: 14px;
-    }
-
-    /* Align numbers to the right */
-    .dataframe td {
-        text-align: right;
-    }
-
-    /* Color positive & negative values */
-    .dataframe td:nth-child(n+3) {
-        color: black;
-    }
-    
-    .dataframe td:nth-child(n+3):contains("-") {
-        color: red;
-    }
-    
-    .dataframe td:nth-child(n+3):not(:contains("-")) {
-        color: green;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
 # Function to download file from Google Drive
 def download_from_drive(file_id, filename="GoogleSummary.xlsm"):
     try:
