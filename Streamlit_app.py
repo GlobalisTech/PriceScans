@@ -18,7 +18,7 @@ with open('styles.css') as f:
 
 # Google Drive File ID and filename
 GOOGLE_DRIVE_FILE_ID = "13lT8UO4HKq_3lY7MVxZptUvO8X3vTrQQw_yPZk-FPW8"
-FILE_NAME = "GoogleSummary1.xlsm"
+FILE_NAME = "GoogleSummary.xlsm"
 
 # Portfolio configurations
 MD_ALLOWED_SYMBOLS = [
