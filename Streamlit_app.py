@@ -2,10 +2,8 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 import os
-import requests
 import gdown
-from datetime import datetime, timedelta
-import numpy as np
+from datetime import datetime
 
 # Set page config at the very beginning
 st.set_page_config(
@@ -168,6 +166,12 @@ def main():
     else:
         symbols = NEW_AGE_STOCKS
         rates = NEWAGE_BUY_RATES
+
+    # Download the file from Google Drive
+    downloaded_file = download_from_drive(GOOGLE_DRIVE_FILE_ID, FILE_NAME)
+    if downloaded_file is None:
+        st.error("Failed to download the file. Please check the Google Drive link and try again.")
+        return
 
     # Load and process data
     data = load_and_process_data(FILE_NAME, symbols, rates)
