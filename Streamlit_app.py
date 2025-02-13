@@ -169,7 +169,7 @@ def create_performance_chart(data):
         xaxis=dict(
             title="Stock Symbol",
             title_font=dict(color="black"),  # Sets "Stock Symbol" font color to black
-            tickangle=270  # Keeps x-axis labels horizontal
+            tickangle=270,  # Keeps x-axis labels horizontal
             tickfont=dict(size=14, color="black")
         ),
         yaxis_title="ROI (%)",
