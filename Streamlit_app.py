@@ -112,22 +112,6 @@ def load_and_process_data(filename, allowed_symbols, buy_rates):
 
         # Process columns
         data.columns = data.columns.astype(str)
-        if "DATE1" in data.columns:
-            data.drop(columns=["DATE1"], inplace=True)
-
-        # Handle date columns
-        date_cols = [col for col in data.columns if "-" in col and col[:4].isdigit()]
-        dates = {col: pd.to_datetime(col).strftime('%d %b').upper() for col in date_cols}
-
-        # Rename columns
-        rename_dict = {}
-        for col in data.columns:
-            if col in dates:
-                rename_dict[col] = f"{dates[col]} (in %)"
-            elif col not in ["SYMBOL", "CLOSE", "BUY RATE"]:
-                rename_dict[col] = f"{col} (in %)"
-
-        data.rename(columns=rename_dict, inplace=True)
 
         # Filter and process data
         data["SYMBOL"] = data["SYMBOL"].fillna("UNKNOWN")
@@ -137,12 +121,12 @@ def load_and_process_data(filename, allowed_symbols, buy_rates):
 
         # Calculate ROI
         filtered["BUY RATE"] = filtered["SYMBOL"].map(buy_rates)
-        filtered["ROI (in %)"] = ((filtered["CLOSE"] - filtered["BUY RATE"]) / filtered["BUY RATE"] * 100).round(2)
+        filtered["ROI (%)"] = ((filtered["CLOSE"] - filtered["BUY RATE"]) / filtered["BUY RATE"] * 100).round(2)
 
-        # Order columns
-        cols = ["SYMBOL", "BUY RATE", "ROI (in %)", "CLOSE"]
-        cols.extend([col for col in filtered.columns if col not in cols])
-        filtered = filtered[cols]
+        # Ensure proper column order
+        date_cols = [col for col in filtered.columns if col not in ["SYMBOL", "CLOSE", "BUY RATE", "ROI (%)"]]
+        column_order = ["SYMBOL", "CLOSE", "ROI (%)", "BUY RATE"] + date_cols
+        filtered = filtered[column_order]
 
         return filtered
 
@@ -151,14 +135,14 @@ def load_and_process_data(filename, allowed_symbols, buy_rates):
         return None
 
 def create_performance_chart(data):
-    roi_data = data.sort_values("ROI (in %)")
+    roi_data = data.sort_values("ROI (%)")
 
     fig = go.Figure()
-    colors = roi_data["ROI (in %)"].apply(lambda x: 'red' if x < 0 else 'green' if x <= 5 else 'orange')
+    colors = roi_data["ROI (%)"].apply(lambda x: 'red' if x < 0 else 'green' if x <= 5 else 'blue')
 
     fig.add_trace(go.Bar(
         x=roi_data["SYMBOL"],
-        y=roi_data["ROI (in %)"],
+        y=roi_data["ROI (%)"],
         marker_color=colors,
         name="ROI"
     ))
@@ -202,16 +186,16 @@ def main():
         col1, col2, col3 = st.columns(3)
 
         with col1:
-            avg_roi = data["ROI (in %)"].mean()
+            avg_roi = data["ROI (%)"].mean()
             st.metric("Average ROI", f"{avg_roi:.2f}%")
 
         with col2:
-            profitable = len(data[data["ROI (in %)"] > 0])
+            profitable = len(data[data["ROI (%)"] > 0])
             st.metric("Stocks in Profit", profitable)
 
         with col3:
-            best = data.loc[data["ROI (in %)"].idxmax()]
-            st.metric("Top Performer", f"{best['SYMBOL']} ({best['ROI (in %)']}%)")
+            best = data.loc[data["ROI (%)"].idxmax()]
+            st.metric("Top Performer", f"{best['SYMBOL']} ({best['ROI (%)']}%)")
 
         # Performance chart
         st.plotly_chart(create_performance_chart(data), use_container_width=True)
@@ -223,7 +207,7 @@ def main():
             .apply(lambda x: [
                 'color: red; font-weight: bold' if isinstance(v, (int, float)) and v < 0 else
                 'color: green; font-weight: bold' if isinstance(v, (int, float)) and 0 < v <= 5 else
-                'color: orange; font-weight: bold' if isinstance(v, (int, float)) and v > 5 else
+                'color: blue; font-weight: bold' if isinstance(v, (int, float)) and v > 5 else
                 '' for v in x
             ], axis=1),
             use_container_width=True,
