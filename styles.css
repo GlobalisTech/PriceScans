@@ -1,18 +1,20 @@
 .stApp {
-    max-width: 100%;
+    max-width: 1600px;
+    max-height: 100%;
     margin: 0 auto;
-    padding: 0 20px;
 }
 
 .main-header {
     text-align: center;
-    color: #0068c9;
+/*     color: #0068c9; */
+    color : #FFA500;
     padding: 1rem 0;
     margin-bottom: 2rem;
 }
 
 .portfolio-metrics {
     background-color: #f8f9fa;
+/*     background-color: #000000; */
     padding: 1rem;
     border-radius: 8px;
     margin: 1rem 0;
@@ -66,62 +68,43 @@
     background-color: #218838;
 }
 
-/* Table container styling */
-.stDataFrame {
-    width: 100% !important;
-    margin: 0 -20px;
-    max-width: calc(100% + 40px);
-}
-
-/* Table styling */
+/* Custom styling for data tables */
 .dataframe {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    width: 100% !important;  /* Force full width */
     width: 100% !important;
-    table-layout: auto;
+
 }
 
-/* Header styling */
+.stDataFrame {
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    overflow: hidden;
+    width: 100% !important;  /* Force full width */
+    width: 100% !important;
+    margin: 0 -20px;  /* Negative margin to counteract padding */
+    max-width: calc(100% + 40px);  /* Compensate for the negative margin */
+}
+/* Ensure table cells have proper padding and alignment */
+.dataframe td, .dataframe th {
+    padding: 8px 12px !important;
+/* Style table headers */
 .dataframe th {
     font-style: italic !important;
     background-color: #f8f9fa;
     font-weight: 600;
-    padding: 8px 12px !important;
+    padding: 12px 16px !important;
     text-align: center !important;
-    white-space: nowrap;
-    min-width: 60px;  /* Reduced minimum width */
 }
-
-/* Cell styling */
+/* Style table cells */
 .dataframe td {
-    padding: 8px 12px !important;
+    padding: 8px 16px !important;
     white-space: nowrap;
+    min-width: 100px;
+    min-width: 80px;  /* Reduced from 100px to fit more columns */
     text-align: right;
 }
-
-/* Left align SYMBOL column */
+/* Make SYMBOL column left-aligned */
 .dataframe td:first-child {
     text-align: left;
-}
-
-/* Ensure horizontal scrolling for wide tables */
-.stDataFrame > div {
-    overflow-x: auto !important;
-}
-
-/* Custom scrollbar styling */
-.stDataFrame > div::-webkit-scrollbar {
-    height: 8px;
-}
-
-.stDataFrame > div::-webkit-scrollbar-track {
-    background: #f1f1f1;
-}
-
-.stDataFrame > div::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 4px;
-}
-
-.stDataFrame > div::-webkit-scrollbar-thumb:hover {
-    background: #555;
 }
