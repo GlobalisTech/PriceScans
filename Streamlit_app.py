@@ -107,8 +107,9 @@ def load_and_process_data(filename, allowed_symbols, buy_rates):
         if os.path.exists(filename):
             data = pd.read_excel(filename, sheet_name="Summary")
         else:
-            st.info("Using sample data for demonstration")
-            data = generate_sample_data(allowed_symbols, buy_rates)
+            st.info("Failed to download file")
+            # st.info("Using sample data for demonstration")
+            # data = generate_sample_data(allowed_symbols, buy_rates)
 
         # Process columns
         data.columns = data.columns.astype(str)
