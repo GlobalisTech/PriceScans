@@ -171,7 +171,7 @@ def create_performance_chart(data):
         height=400,
         # width = 1000,
         showlegend=False,
-        xaxis=dict(tickangle=0) 
+        xaxis=dict(tickangle=90) 
     )
 
     return fig
