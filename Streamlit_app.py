@@ -244,7 +244,7 @@ def main():
             .apply(lambda x: [
                 'color: red; font-weight: bold' if isinstance(v, (int, float)) and v < 0 else
                 'color: green; font-weight: bold' if isinstance(v, (int, float)) and 0 < v <= 5 else
-                'color: blue; font-weight: bold' if isinstance(v, (int, float)) and v > 5 else
+                'color: orange; font-weight: bold' if isinstance(v, (int, float)) and v > 5 else
                 '' for v in x
             ], axis=1)
             .set_table_styles([{"selector": "thead th", "props": [("color", "black"), ("font-weight", "bold")]}]),
