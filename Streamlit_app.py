@@ -236,12 +236,26 @@ def main():
         st.plotly_chart(create_performance_chart(data), use_container_width=True)
 
         # Data table
+        # st.subheader(f"{portfolio} Summary Table")
+        # st.dataframe(
+        #     data.style.format(precision=2)
+        #     .apply(lambda x: [
+        #         'color: black; font-weight: bold' if x.name in ["BUY RATE"] else
+        #     ], axis = 1),
+        #     .apply(lambda x: [
+        #         'color: red; font-weight: bold' if isinstance(v, (int, float)) and v < 0 else
+        #         'color: green; font-weight: bold' if isinstance(v, (int, float)) and 0 < v <= 5 else
+        #         'color: darkgreen; font-weight: bold' if isinstance(v, (int, float)) and v > 5 else
+        #         '' for v in x
+        #     ], axis=1),
+        #     use_container_width=True,
+        #     height=500,
+        # )
+
         st.subheader(f"{portfolio} Summary Table")
         st.dataframe(
             data.style.format(precision=2)
-            .apply(lambda x: [
-                'color: black; font-weight: bold' if x.name in ["BUY RATE"] else
-            ], axis = 1),
+            .apply(lambda x: ['color: black; font-weight: bold' if x.name == "BUY RATE" else '' for _ in x], axis=1)
             .apply(lambda x: [
                 'color: red; font-weight: bold' if isinstance(v, (int, float)) and v < 0 else
                 'color: green; font-weight: bold' if isinstance(v, (int, float)) and 0 < v <= 5 else
