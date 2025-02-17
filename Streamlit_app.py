@@ -255,7 +255,7 @@ def main():
         st.subheader(f"{portfolio} Summary Table")
         st.dataframe(
             data.style.format(precision=2)
-            .apply(lambda x: ['color: black; font-weight: bold' if x.name == ["BUY RATE", "CLOSE"] else '' for _ in x], axis=0)
+            .apply(lambda x: ['color: black; font-weight: bold' if x.index == "BUY RATE" else '' for _ in x], axis=0)
             .apply(lambda x: [
                 'color: red; font-weight: bold' if isinstance(v, (int, float)) and v < 0 else
                 'color: green; font-weight: bold' if isinstance(v, (int, float)) and 0 < v <= 5 else
