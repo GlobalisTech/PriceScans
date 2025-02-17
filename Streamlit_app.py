@@ -236,20 +236,40 @@ def main():
         st.plotly_chart(create_performance_chart(data), use_container_width=True)
 
         # Data table
+        # st.subheader(f"{portfolio} Summary Table")
+        # st.dataframe(
+        #     data.style.format(precision=2)
+        #     .apply(lambda x: [
+        #         'color: black; font-weight: bold' if x.name in ["CLOSE", "BUY RATE"] else
+        #         'color: red; font-weight: bold' if isinstance(v, (int, float)) and v < 0 else
+        #         'color: green; font-weight: bold' if isinstance(v, (int, float)) and 0 < v <= 5 else
+        #         'color: darkgreen; font-weight: bold' if isinstance(v, (int, float)) and v > 5 else
+        #         '' for v in x
+        #     ], axis=1),
+        #     use_container_width=True,
+        #     height=500,
+        # )
+
+        def highlight_values(val, col_name):
+            """Apply styles based on column names and value conditions"""
+            if col_name in ["CLOSE", "BUY RATE"]:
+                return 'color: black; font-weight: bold'
+            elif isinstance(val, (int, float)) and val < 0:
+                return 'color: red; font-weight: bold'
+            elif isinstance(val, (int, float)) and 0 < val <= 5:
+                return 'color: green; font-weight: bold'
+            elif isinstance(val, (int, float)) and val > 5:
+                return 'color: darkgreen; font-weight: bold'
+            return ''  # Default style
+        
+        styled_data = data.style.apply(lambda x: [highlight_values(v, x.name) for v in x], axis=0)
+        
         st.subheader(f"{portfolio} Summary Table")
         st.dataframe(
-            data.style.format(precision=2)
-            .apply(lambda x: [
-                'color: black; font-weight: bold' if x.name in ["CLOSE", "BUY RATE"] else
-                'color: red; font-weight: bold' if isinstance(v, (int, float)) and v < 0 else
-                'color: green; font-weight: bold' if isinstance(v, (int, float)) and 0 < v <= 5 else
-                'color: darkgreen; font-weight: bold' if isinstance(v, (int, float)) and v > 5 else
-                '' for v in x
-            ], axis=1),
+            styled_data,
             use_container_width=True,
             height=500,
         )
-
         # Download option
         csv = data.to_csv(index=False).encode('utf-8')
         st.download_button(
