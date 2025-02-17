@@ -157,20 +157,32 @@ def create_performance_chart(data):
         name="ROI"
     ))
 
+    # fig.update_layout(
+    #     title="Portfolio Performance by Stock",
+    #     xaxis=dict(
+    #         title="Stock Symbol",
+    #         title_font=dict(color="black"),
+    #         tickangle=270,
+    #         tickfont=dict(size=14, color="black")
+    #     ),
+    #     yaxis_title="ROI (%)",
+    #     template="plotly_dark",
+    #     height=400,
+    #     showlegend=False,
+    # )
     fig.update_layout(
-        title="Portfolio Performance by Stock",
-        xaxis=dict(
-            title="Stock Symbol",
-            title_font=dict(color="black"),
-            tickangle=270,
-            tickfont=dict(size=14, color="black")
-        ),
-        yaxis_title="ROI (%)",
-        template="plotly_dark",
-        height=400,
-        showlegend=False,
+    title="Portfolio Performance by Stock",
+    xaxis=dict(
+        title="Stock Symbol",
+        title_font=dict(color="black"),
+        tickangle=270,
+        tickfont=dict(size=14, color="black")  # Changed to black
+    ),
+    yaxis_title="ROI (%)",
+    template="plotly_dark",
+    height=400,
+    showlegend=False,
     )
-
     
 
     return fig
