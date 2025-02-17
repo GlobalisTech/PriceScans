@@ -254,12 +254,12 @@ def main():
             """Apply styles based on column names and value conditions"""
             if col_name in ["CLOSE", "BUY RATE"]:
                 return 'color: black; font-weight: bold'
-            elif isinstance(val, (int, float)) and val < 0:
-                return 'color: red; font-weight: bold'
-            elif isinstance(val, (int, float)) and 0 < val <= 5:
-                return 'color: green; font-weight: bold'
-            elif isinstance(val, (int, float)) and val > 5:
-                return 'color: darkgreen; font-weight: bold'
+            # elif isinstance(val, (int, float)) and val < 0:
+            #     return 'color: red; font-weight: bold'
+            # elif isinstance(val, (int, float)) and 0 < val <= 5:
+            #     return 'color: green; font-weight: bold'
+            # elif isinstance(val, (int, float)) and val > 5:
+            #     return 'color: darkgreen; font-weight: bold'
             return ''  # Default style
         
         styled_data = data.style.apply(lambda x: [highlight_values(v, x.name) for v in x], axis=0)
