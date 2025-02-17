@@ -241,7 +241,7 @@ def main():
             data.style.format(precision=2)
             .apply(lambda x: [
                 'color: black; font-weight: bold' if x.name in ["BUY RATE"] else
-            ], axis = 1,
+            ], axis = 1),
             .apply(lambda x: [
                 'color: red; font-weight: bold' if isinstance(v, (int, float)) and v < 0 else
                 'color: green; font-weight: bold' if isinstance(v, (int, float)) and 0 < v <= 5 else
