@@ -163,13 +163,15 @@ def create_performance_chart(data):
             title="Stock Symbol",
             title_font=dict(color="black"),
             tickangle=270,
-            tickfont=dict(size=14, color="green")
+            tickfont=dict(size=14, color="black")
         ),
         yaxis_title="ROI (%)",
         template="plotly_dark",
         height=400,
         showlegend=False,
     )
+
+    
 
     return fig
 
@@ -226,6 +228,7 @@ def main():
         st.dataframe(
             data.style.format(precision=2)
             .apply(lambda x: [
+                'color: black; font-weight: bold' if x.name in ["CLOSE", "BUY RATE"] else
                 'color: red; font-weight: bold' if isinstance(v, (int, float)) and v < 0 else
                 'color: green; font-weight: bold' if isinstance(v, (int, float)) and 0 < v <= 5 else
                 'color: orange; font-weight: bold' if isinstance(v, (int, float)) and v > 5 else
