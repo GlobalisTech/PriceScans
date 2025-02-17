@@ -148,7 +148,7 @@ def create_performance_chart(data):
     roi_data = data.sort_values("ROI (in %)")
 
     fig = go.Figure()
-    colors = roi_data["ROI (in %)"].apply(lambda x: 'red' if x < 0 else 'green' if x <= 5 else 'orange')
+    colors = roi_data["ROI (in %)"].apply(lambda x: 'red' if x < 0 else 'green' if x <= 5 else 'black')
 
     fig.add_trace(go.Bar(
         x=roi_data["SYMBOL"],
