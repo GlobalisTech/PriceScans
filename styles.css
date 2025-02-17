@@ -108,3 +108,14 @@
 .dataframe td:first-child {
     text-align: left;
 }
+/* Force BUY RATE and CLOSE column to be black */
+div[data-testid="stDataFrame"] td:nth-child(2),
+div[data-testid="stDataFrame"] td:nth-child(4) {
+    color: black !important;
+    font-weight: bold;
+}
+
+/* Change stock names below the bar chart to black */
+g.xtick text {
+    fill: black !important;
+}
