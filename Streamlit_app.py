@@ -243,7 +243,7 @@ def main():
                 'color: black; font-weight: bold' if x.name in ["CLOSE", "BUY RATE"] else
                 'color: red; font-weight: bold' if isinstance(v, (int, float)) and v < 0 else
                 'color: green; font-weight: bold' if isinstance(v, (int, float)) and 0 < v <= 5 else
-                'color: orange; font-weight: bold' if isinstance(v, (int, float)) and v > 5 else
+                'color: darkgreen; font-weight: bold' if isinstance(v, (int, float)) and v > 5 else
                 '' for v in x
             ], axis=1),
             use_container_width=True,
