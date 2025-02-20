@@ -42,6 +42,21 @@ NEW_AGE_STOCKS = [
     "SENCO", "SHAKTIPUMP", "SKYGOLD", "TARIL", "TECHNOE", "WEALTH", "WOCKPHARMA"
 ]
 
+WATCHLIST7 = ["ACE", "AIIL", "AKUMS", "ALPHALOGIC", "ANANTRAJ", "AVANTEL", "APARINDS",
+              "AURIONPRO", "AVAILFC", "AVANTIFEED", "AWFIS", "AWHCL", "AZAD", "BSE",
+              "CDSL", "CEIGALL", "CEINSYSTECH", "DOMS", "DYNAMATECH", "E2E", "ECORECO",
+              "ETHOSLTD", "EXICOM", "FABCLEAN", "GMRAIRPORT", "GOLDIAM", "GRAUWEIL",
+              "GRAVITA", "GRWRHITCH", "GSLSU", "HBLENGINE", "HGINFRA", "HITECHGEAR",
+              "IKIO", "INA", "INOXWIND", "INTLCOMBQ", "IWEL", "JITFINFRA", "JOCIL",
+              "JSWENERGY", "KALAMANDIR", "KAYNES", "KPEL", "KPIGREEN", "LANDMARK",
+              "MALLCOM", "MCX", "MICEL", "MINID", "MOSCHIP", "NETWEB", "NEULANDLAB",
+              "NIBE", "OLATECH", "PAYTM", "PGEL", "PIGL", "PNCINFRA", "POCL", "POKARNA",
+              "POWERINDIA", "PRECAM", "PTCIL", "QUICKHEAL", "REFEX", "RIR", "SAGILITY",
+              "SAMHI", "SENCO", "SHAKTIPUMP", "SKYGOLD", "SOLARINDS", "SPANDANA", "SWELECTES",
+              "SWSOLAR", "TARIL", "TATAINVEST", "TECHNOE", "TIINDIA", "TRENT", "UNITECH", "VEDL",
+              "VEEFIN", "VISHAL", "WAAREENER", "WAAREERTL", "WABAG", "WEBELSOLAR", "WOCKPHARMA",
+              "ZOMATO", "WEALTH", "POWERMECH", "GMRP&UI"]
+
 # Define Buy Rates
 MD_BUY_RATES = {
     "TARIL": 733.83, "AIIL": 1590.00, "NETWEB": 2779.63, "GRAVITA": 2346.30, "SKYGOLD": 271.77,
@@ -72,6 +87,7 @@ NEWAGE_BUY_RATES = {
     "SKYGOLD": 271.77, "TARIL": 367, "TECHNOE": 1549.07, "WEALTH": 1331.86, "WOCKPHARMA": 1109.2
 }
 
+WATCHLIST7_BUY_RATES = {}
 
 @st.cache_data(ttl=300)
 def download_from_drive(file_id, filename):
@@ -193,7 +209,7 @@ def main():
     # Portfolio selection
     portfolio = st.selectbox(
         "Select Portfolio",
-        ["MD Portfolio", "GOINVESTX Portfolio", "NEW AGE Portfolio"]
+        ["MD Portfolio", "GOINVESTX Portfolio", "NEW AGE Portfolio", "WATCHLIST7"]
     )
 
     # Map selection to data
@@ -203,9 +219,12 @@ def main():
     elif portfolio == "GOINVESTX Portfolio":
         symbols = GOINVESTX_ALLOWED_SYMBOLS
         rates = GOINVESTX_BUY_RATES
-    else:
+    elif portfolio == " NEW AGE Portfolio":
         symbols = NEW_AGE_STOCKS
         rates = NEWAGE_BUY_RATES
+    else:
+        symbols = WATCHLIST7
+        rates = WATCHLIST7_BUY_RATES
 
     # Download the file from Google Drive
     downloaded_file = download_from_drive(GOOGLE_DRIVE_FILE_ID, FILE_NAME)
