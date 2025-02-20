@@ -42,20 +42,22 @@ NEW_AGE_STOCKS = [
     "SENCO", "SHAKTIPUMP", "SKYGOLD", "TARIL", "TECHNOE", "WEALTH", "WOCKPHARMA"
 ]
 
-WATCHLIST7 = ["ACE", "AIIL", "AKUMS", "ALPHALOGIC", "ANANTRAJ", "AVANTEL", "APARINDS",
-              "AURIONPRO", "AVAILFC", "AVANTIFEED", "AWFIS", "AWHCL", "AZAD", "BSE",
-              "CDSL", "CEIGALL", "CEINSYSTECH", "DOMS", "DYNAMATECH", "E2E", "ECORECO",
-              "ETHOSLTD", "EXICOM", "FABCLEAN", "GMRAIRPORT", "GOLDIAM", "GRAUWEIL",
-              "GRAVITA", "GRWRHITCH", "GSLSU", "HBLENGINE", "HGINFRA", "HITECHGEAR",
-              "IKIO", "INA", "INOXWIND", "INTLCOMBQ", "IWEL", "JITFINFRA", "JOCIL",
-              "JSWENERGY", "KALAMANDIR", "KAYNES", "KPEL", "KPIGREEN", "LANDMARK",
-              "MALLCOM", "MCX", "MICEL", "MINID", "MOSCHIP", "NETWEB", "NEULANDLAB",
-              "NIBE", "OLATECH", "PAYTM", "PGEL", "PIGL", "PNCINFRA", "POCL", "POKARNA",
-              "POWERINDIA", "PRECAM", "PTCIL", "QUICKHEAL", "REFEX", "RIR", "SAGILITY",
-              "SAMHI", "SENCO", "SHAKTIPUMP", "SKYGOLD", "SOLARINDS", "SPANDANA", "SWELECTES",
-              "SWSOLAR", "TARIL", "TATAINVEST", "TECHNOE", "TIINDIA", "TRENT", "UNITECH", "VEDL",
-              "VEEFIN", "VISHAL", "WAAREENER", "WAAREERTL", "WABAG", "WEBELSOLAR", "WOCKPHARMA",
-              "ZOMATO", "WEALTH", "POWERMECH", "GMRP&UI"]
+WATCHLIST7 = [
+"ACE", "AIIL", "AKUMS", "ALPHALOGIC", "ANANTRAJ", "AVANTEL", "APARINDS",
+"AURIONPRO", "AVAILFC", "AVANTIFEED", "AWFIS", "AWHCL", "AZAD", "BSE",
+"CDSL", "CEIGALL", "CEINSYSTECH", "DOMS", "DYNAMATECH", "E2E", "ECORECO",
+"ETHOSLTD", "EXICOM", "FABCLEAN", "GMRAIRPORT", "GOLDIAM", "GRAUWEIL",
+"GRAVITA", "GRWRHITCH", "GSLSU", "HBLENGINE", "HGINFRA", "HITECHGEAR",
+"IKIO", "INA", "INOXWIND", "INTLCOMBQ", "IWEL", "JITFINFRA", "JOCIL",
+"JSWENERGY", "KALAMANDIR", "KAYNES", "KPEL", "KPIGREEN", "LANDMARK",
+"MALLCOM", "MCX", "MICEL", "MINID", "MOSCHIP", "NETWEB", "NEULANDLAB",
+"NIBE", "OLATECH", "PAYTM", "PGEL", "PIGL", "PNCINFRA", "POCL", "POKARNA",
+"POWERINDIA", "PRECAM", "PTCIL", "QUICKHEAL", "REFEX", "RIR", "SAGILITY",
+"SAMHI", "SENCO", "SHAKTIPUMP", "SKYGOLD", "SOLARINDS", "SPANDANA", "SWELECTES",
+"SWSOLAR", "TARIL", "TATAINVEST", "TECHNOE", "TIINDIA", "TRENT", "UNITECH", "VEDL",
+"VEEFIN", "VISHAL", "WAAREENER", "WAAREERTL", "WABAG", "WEBELSOLAR", "WOCKPHARMA",
+"ZOMATO", "WEALTH", "POWERMECH", "GMRP&UI"
+]
 
 # Define Buy Rates
 MD_BUY_RATES = {
@@ -248,7 +250,20 @@ def main():
             st.metric("Stocks in Profit", profitable)
 
         with col3:
-            best = data.loc[data["ROI (in %)"].idxmax()]
+            # best = data.loc[data["ROI (in %)"].idxmax()]
+
+            if not data.empty and "ROI (in %)" in data.columns and data["ROI (in %)"].notna().any():
+                best_index = data["ROI (in %)"].idxmax()
+                if pd.notna(best_index) and best_index in data.index:
+                    best = data.loc[best_index]
+                    best_symbol = best["SYMBOL"]
+                    best_roi = best["ROI (in %)"]
+                else:
+                    best_symbol = "None"
+                    best_roi = 0
+            else:
+                best_symbol = "None"
+                best_roi = 0
             st.metric("Top Performer", f"{best['SYMBOL']} ({best['ROI (in %)']}%)")
 
         # Performance chart
