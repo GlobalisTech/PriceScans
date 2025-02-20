@@ -219,7 +219,7 @@ def main():
     elif portfolio == "GOINVESTX Portfolio":
         symbols = GOINVESTX_ALLOWED_SYMBOLS
         rates = GOINVESTX_BUY_RATES
-    elif portfolio == " NEW AGE Portfolio":
+    elif portfolio == "NEW AGE Portfolio":
         symbols = NEW_AGE_STOCKS
         rates = NEWAGE_BUY_RATES
     else:
