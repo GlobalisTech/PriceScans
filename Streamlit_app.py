@@ -346,23 +346,23 @@ def main():
             st.metric("Stocks in Profit", profitable)
 
         with col3:
-            # best = data.loc[data["ROI (in %)"].idxmax()]
+            best = data.loc[data["ROI (in %)"].idxmax()]
 
-            if not data.empty and "ROI (in %)" in data.columns and data["ROI (in %)"].notna().any():
-                best_index = data["ROI (in %)"].idxmax()
-                if pd.notna(best_index) and best_index in data.index:
-                    best = data.loc[best_index]
-                    best_symbol = best["SYMBOL"]
-                    best_roi = best["ROI (in %)"]
-                else:
-                    best_symbol = "None"
-                    best_roi = 0
-            else:
-                best_symbol = "None"
-                best_roi = 0
-            #st.metric("Top Performer", f"{best['SYMBOL']} ({best['ROI (in %)']}%)")
+            # if not data.empty and "ROI (in %)" in data.columns and data["ROI (in %)"].notna().any():
+            #     best_index = data["ROI (in %)"].idxmax()
+            #     if pd.notna(best_index) and best_index in data.index:
+            #         best = data.loc[best_index]
+            #         best_symbol = best["SYMBOL"]
+            #         best_roi = best["ROI (in %)"]
+            #     else:
+            #         best_symbol = "None"
+            #         best_roi = 0
+            # else:
+            #     best_symbol = "None"
+            #     best_roi = 0
+            st.metric("Top Performer", f"{best['SYMBOL']} ({best['ROI (in %)']}%)")
             
-            st.metric("Top Performer", f"{best_symbol} ({best_roi}%)")
+            # st.metric("Top Performer", f"{best_symbol} ({best_roi}%)")
 
         # Performance chart
         st.plotly_chart(create_performance_chart(data), use_container_width=True)
