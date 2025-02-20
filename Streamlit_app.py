@@ -264,7 +264,9 @@ def main():
             else:
                 best_symbol = "None"
                 best_roi = 0
-            st.metric("Top Performer", f"{best['SYMBOL']} ({best['ROI (in %)']}%)")
+            #st.metric("Top Performer", f"{best['SYMBOL']} ({best['ROI (in %)']}%)")
+            
+            st.metric("Top Performer", f"{best_symbol} ({best_roi}%)")
 
         # Performance chart
         st.plotly_chart(create_performance_chart(data), use_container_width=True)
