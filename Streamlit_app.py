@@ -85,7 +85,7 @@ NEWAGE_BUY_RATES = {
     "AWHCL": 717.16, "CEINSYSTECH": 1487.43, "E2E": 3043.68, "ECORECO": 970.64, "GOLDIAM": 346.78,
     "INA": 419.48, "KAYNES": 5304.66, "MINID": 195.81, "NETWEB": 2660.83, "NEULANDLAB": 13373.00,
     "NIBE": 1900.08, "OLATECH": 488.00, "ORIANA": 2267.68, "POCL": 983.78, "POKARNA": 1147.92,
-    "QUICKHEAL": 656.82, "REFEX": 486.66, "RIR": 3667.91, "SENCO": 619.83, "SHAKTIPUMP": 728.05,
+    "QUICKHEAL": 656.82, "REFEX": 486.66, "RIR": 3667.91, "SENCO": 177.00, "SHAKTIPUMP": 728.05,
     "SKYGOLD": 271.77, "TARIL": 367, "TECHNOE": 1549.07, "WEALTH": 1331.86, "WOCKPHARMA": 1109.2
 }
 
@@ -307,7 +307,7 @@ def main():
     # Portfolio selection
     portfolio = st.selectbox(
         "Select Portfolio",
-        ["MD Portfolio", "GOINVESTX Portfolio", "NEW AGE Portfolio", "WATCHLIST7"]
+        ["NEW AGE Portfolio", "GOINVESTX Portfolio", "MD Portfolio", "WATCHLIST7"]
     )
 
     # Map selection to data
