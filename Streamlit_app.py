@@ -369,16 +369,16 @@ def main():
     )
 
     # Map selection to data
-    if portfolio == "MD Portfolio":
+    if portfolio == "MD PORTFOLIO":
         symbols = MD_ALLOWED_SYMBOLS
         rates = MD_BUY_RATES
-    elif portfolio == "GOINVESTX Portfolio":
+    elif portfolio == "GOINVESTX PORTFOLIO":
         symbols = GOINVESTX_ALLOWED_SYMBOLS
         rates = GOINVESTX_BUY_RATES
-    elif portfolio == "NEW AGE Portfolio":
+    elif portfolio == "NEW AGE PORTFOLIO":
         symbols = NEW_AGE_STOCKS
         rates = NEWAGE_BUY_RATES
-    elif portfolio == "PARUL Portfolio":
+    elif portfolio == "PARUL PORTFOLIO":
         symbols = PARUL_PORTFOLIO
         rates = PARUL_STOCK_BUY_RATES
     else:
