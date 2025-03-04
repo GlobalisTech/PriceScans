@@ -42,6 +42,10 @@ NEW_AGE_STOCKS = [
     "SENCO", "SHAKTIPUMP", "SKYGOLD", "TARIL", "TECHNOE", "WEALTH", "WOCKPHARMA"
 ]
 
+PARUL_PORTFOLIO = [
+    "AIRTELPP", "BHARTIARTL", "CGPOWER", "JSWENERGY", "M&M", "NPST", "POLYMED", 
+    "RELIANCE", "SUZLON", "TITAGARH", "ZOMATO"]
+
 WATCHLIST7 = [
 "ACE", "AIIL", "AKUMS", "ALPHALOGIC", "ANANTRAJ", "AVANTEL", "APARINDS",
 "AURIONPRO", "AVAILFC", "AVANTIFEED", "AWFIS", "AWHCL", "AZAD", "BSE",
@@ -94,7 +98,19 @@ GOINVESTX_BUY_RATES = {
 
 }
 
-
+PARUL_STOCK_BUY_RATES = {
+    'AIRTELPP': 1131.15,
+    'BHARTIARTL': 1575.75,
+    'CGPOWER': 628.84,
+    'JSWENERGY': 621.69,
+    'M&M': 1257.4,
+    'NPST': 3033.0,
+    'POLYMED': 1871.78,
+    'RELIANCE': 0.0,
+    'SUZLON': 32.1,
+    'TITAGARH': 1334.02,
+    'ZOMATO': 239.06
+}
 
 NEWAGE_BUY_RATES = {
     "ALPHALOGIC": 165.36,
@@ -349,7 +365,7 @@ def main():
     # Portfolio selection
     portfolio = st.selectbox(
         "Select Portfolio",
-        ["NEW AGE Portfolio", "GOINVESTX Portfolio", "MD Portfolio", "WATCHLIST7"]
+        ["NEW AGE PORTFOLIO", "PARUL PORTFOLIO", "GOINVESTX PORTFOLIO", "MD PORTFOLIO", "WATCHLIST7"]
     )
 
     # Map selection to data
@@ -362,6 +378,9 @@ def main():
     elif portfolio == "NEW AGE Portfolio":
         symbols = NEW_AGE_STOCKS
         rates = NEWAGE_BUY_RATES
+    elif portfolio == "PARUL Portfolio":
+        symbols = PARUL_PORTFOLIO
+        rates = PARUL_STOCK_BUY_RATES
     else:
         symbols = WATCHLIST7
         rates = WATCHLIST7_BUY_RATES
