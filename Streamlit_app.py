@@ -63,6 +63,14 @@ WATCHLIST7 = [
 "ZOMATO", "WEALTH", "POWERMECH", "GMRP&UI"
 ]
 
+MARCH2025 = [
+"AEROFLEX", "AMIORG", "ANUP", "APARINDS", "AVROIND", "AZAD", "BSE", "CDSL", 
+"CGPOWER", "CIGNITITEC", "DENORA", "EPACK", "EPIGRAL", "ETHOSLTD", "GESHIP", 
+"GRAPHITE", "HBLENGINE", "HEG", "JCHAC", "JSLL", "MCX", "MOSUTILITY", 
+"OLECTRA", "OLECTRA", "PAR", "PASHUPATI", "POCL", "POKARNA", "PPLPHARMA", 
+"PRECAM", "SAGILITY", "SOLARA", "TRENT", "V2RETAIL", "WEBELSOLAR"
+]
+
 # Define Buy Rates
 MD_BUY_RATES = {
     "TARIL": 733.83, "AIIL": 1590.00, "NETWEB": 2779.63, "GRAVITA": 2346.30, "SKYGOLD": 271.77,
@@ -244,6 +252,43 @@ WATCHLIST7_BUY_RATES = {
     "ZOMATO": 233.51
 }
 
+MARCH2025_BUY_RATES = {
+    "AEROFLEX": 173.10,
+    "AMIORG": 2472.65,
+    "ANUP": 3037.50,
+    "APARINDS": 5712.20,
+    "AVROIND": 168.62,
+    "AZAD": 1307.50,
+    "BSE": 4311.15,
+    "CDSL": 1183.10,
+    "CGPOWER": 629.00,
+    "CIGNITITEC": 1401.60,
+    "DENORA": 798.00,
+    "EPACK": 376.55,
+    "EPIGRAL": 1787.20,
+    "ETHOSLTD": 2581.10,
+    "GESHIP": 870.50,
+    "GRAPHITE": 410.00,
+    "HBLENGINE": 459.90,
+    "HEG": 387.15,
+    "JCHAC": 1702.00,
+    "JSLL": 1798.30,
+    "MCX": 4679.10,
+    "MOS": 265.00,
+    "OLECTRA": 1127.35,
+    "PAR": 96.00,
+    "PASHUPATI": 601.50,
+    "POCL": 588.45,
+    "POKARNA": 1225.00,
+    "PPLPHARMA": 203.43,
+    "PRECAM": 176.96,
+    "SAGILITY": 44.34,
+    "SOLARA": 520.65,
+    "TRENT": 5014.60,
+    "V2RETAIL": 1668.05,
+    "WEBELSOLAR": 881.55,
+}
+
 
 @st.cache_data(ttl=300)
 def download_from_drive(file_id, filename):
@@ -365,7 +410,7 @@ def main():
     # Portfolio selection
     portfolio = st.selectbox(
         "Select Portfolio",
-        ["NEW AGE PORTFOLIO", "PARUL PORTFOLIO", "GOINVESTX PORTFOLIO", "MD PORTFOLIO", "WATCHLIST7"]
+        ["NEW AGE PORTFOLIO", "PARUL PORTFOLIO", "GOINVESTX PORTFOLIO", "MD PORTFOLIO", "WATCHLIST7", "MARCH 2025"]
     )
 
     # Map selection to data
@@ -381,6 +426,9 @@ def main():
     elif portfolio == "PARUL PORTFOLIO":
         symbols = PARUL_PORTFOLIO
         rates = PARUL_STOCK_BUY_RATES
+    elif portfolio == "MARCH 2025":
+        symbols = MARCH2025
+        rates = MARCH2025_BUY_RATES
     else:
         symbols = WATCHLIST7
         rates = WATCHLIST7_BUY_RATES
