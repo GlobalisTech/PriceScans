@@ -307,7 +307,7 @@ def download_from_drive(file_id, filename):
 def load_local_data(filename):
     try:
         if os.path.exists(filename):
-            return pd.read_excel(filename, sheet_name="Summary")
+            return pd.read_excel(filename, sheet_name="GITSUMMARY")
         else:
             st.error(f"File {filename} not found locally.")
             return None
