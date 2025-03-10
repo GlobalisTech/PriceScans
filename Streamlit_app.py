@@ -17,8 +17,11 @@ with open('styles.css') as f:
     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
 # Google Drive File ID and filename
-GOOGLE_DRIVE_FILE_ID = "13lT8UO4HKq_3lY7MVxZptUvO8X3vTrQQw_yPZk-FPW8"
-FILE_NAME = "GoogleSummary.xlsm"
+# GOOGLE_DRIVE_FILE_ID = "13lT8UO4HKq_3lY7MVxZptUvO8X3vTrQQw_yPZk-FPW8"
+# FILE_NAME = "GoogleSummary.xlsm"
+
+GOOGLE_DRIVE_FILE_ID = "15cDbAwEio2-3uHHBuCOvZvaC-BN66-lPbYfUBe9qnzM"
+FILE_NAME = "GITSUMMARY"
 
 # Define allowed symbols for different portfolios
 MD_ALLOWED_SYMBOLS = [
