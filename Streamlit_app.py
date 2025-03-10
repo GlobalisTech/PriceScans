@@ -21,7 +21,7 @@ with open('styles.css') as f:
 # FILE_NAME = "GoogleSummary.xlsm"
 
 GOOGLE_DRIVE_FILE_ID = "15cDbAwEio2-3uHHBuCOvZvaC-BN66-lPbYfUBe9qnzM"
-FILE_NAME = "GITSUMMARY"
+FILE_NAME = "GITSUMMARY.xlsx"
 
 # Define allowed symbols for different portfolios
 MD_ALLOWED_SYMBOLS = [
